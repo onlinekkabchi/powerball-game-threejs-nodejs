@@ -21,7 +21,7 @@ scene.background = new THREE.Color(0xa0a0a0);
 // camera.position.z = 20;
 
 const camera = new THREE.PerspectiveCamera(
-  40,
+  100,
   window.innerWidth / window.innerHeight,
   0.1,
   100
@@ -51,7 +51,7 @@ loader.load(
   }
 );
 
-renderer.setSize(window.innerWidth / 2, window.innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.minDistance = 2;
@@ -63,16 +63,16 @@ controls.update();
 document.body.appendChild(renderer.domElement);
 
 // 큐브 그리기
-// const geometry = new THREE.BoxGeometry(1, 1, 1);
-// const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-// const cube = new THREE.Mesh(geometry, material);
-// scene.add(cube);
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
 
 function animate() {
   requestAnimationFrame(animate);
 
-  //   cube.rotation.x += 0.01;
-  //   cube.rotation.y += 0.01;
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
 
   renderer.render(scene, camera);
 }
