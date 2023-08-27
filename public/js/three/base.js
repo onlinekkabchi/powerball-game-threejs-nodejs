@@ -21,7 +21,7 @@ camera.position.set(0, 2, 10);
 // 캔버스 생성 및 라이트닝 조건 설정
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
-renderer.toneMapping = THREE.ReinhardToneMapping;
+// renderer.toneMapping = THREE.ReinhardToneMapping;
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth * 0.9, window.innerHeight * 0.9);
 
@@ -37,7 +37,7 @@ controls.update();
 document.body.appendChild(renderer.domElement);
 
 // 큐브 추가
-scene.add(cube1, cube2);
+scene.add(cube1, cube2, stageFlag);
 
 // 무대 원본, 베이킹본
 // stage(scene);
@@ -71,6 +71,7 @@ function render() {
   cube1.rotation.x += 0.03;
   cube1.rotation.y += 0.03;
   cube2.rotation.y += 0.03;
+  stageFlag.rotation.y += 0.05;
 
   // 파이널 랜더링
   renderer.render(scene, camera);
