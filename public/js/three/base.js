@@ -4,6 +4,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { scene, sceneBaked } from "./scene.js";
 import { cube1, cube2, stageFlag } from "./cube.js";
 import { stage, stageBaked } from "./stage.js";
+import egg from "./egg.js";
 
 // const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xa0a0a0);
@@ -28,7 +29,7 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 2, 10);
 
 // 캔버스 생성 및 사이즈
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth * 0.9, window.innerHeight * 0.9);
 
 // 카메라 궤도 컨트롤러
@@ -42,9 +43,18 @@ controls.update();
 // 캔버스 추가
 document.body.appendChild(renderer.domElement);
 
+// models(큐브 제외)
 // 무대 원본, 베이킹본
 stage(scene);
 // stageBaked(sceneBaked);
+
+// 달걀
+egg(scene);
+
+// 빛!
+const light = new THREE.DirectionalLight(0xd5deff);
+light.position.set(400, 250, 500);
+scene.add(light);
 
 // 큐브 추가 및 움직임
 function animate() {
@@ -61,5 +71,4 @@ function animate() {
   return renderer.render(scene, camera);
 }
 
-lighting();
 animate();
