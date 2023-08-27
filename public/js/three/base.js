@@ -28,7 +28,7 @@ const camera = new THREE.PerspectiveCamera(
 camera.position.set(0, 2, 10);
 
 // 캔버스 생성 및 사이즈
-const renderer = new THREE.WebGLRenderer();
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth * 0.75, window.innerHeight * 0.75);
 
 // 카메라 궤도 컨트롤러
