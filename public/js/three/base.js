@@ -39,6 +39,7 @@ controls.maxPolarAngle = Math.PI / 2;
 controls.target.set(0, 1, 0);
 controls.update();
 
+// 캔버스 추가
 document.body.appendChild(renderer.domElement);
 
 // 무대 원본, 베이킹본
@@ -60,4 +61,5 @@ function animate() {
   return renderer.render(scene, camera);
 }
 
+lighting();
 animate();
