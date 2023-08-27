@@ -13,7 +13,9 @@ function stage(scene) {
       model.scale.set(1, 1, 1);
       scene.add(model);
     },
-    undefined,
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
     function (err) {
       console.error(err);
     }
@@ -23,14 +25,16 @@ function stage(scene) {
 function stageBaked(scene) {
   // 무대 베이킹본
   loader.load(
-    "./static/model/stage2.glb",
+    "./static/model/stage-baked-3.glb",
     function (gltf) {
       const model = gltf.scene;
       model.position.set(1, 0, 0);
       model.scale.set(1, 1, 1);
       scene.add(model);
     },
-    undefined,
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
     function (err) {
       console.error(err);
     }
@@ -39,7 +43,7 @@ function stageBaked(scene) {
 
 // // 탱크
 // loader.load(
-//   "./static/model/Tiger_I1.glb",
+//   "./static/model/Tiger_2.glb",
 //   function (gltf) {
 //     const model = gltf.scene;
 //     model.position.set(0, 0, 0);
