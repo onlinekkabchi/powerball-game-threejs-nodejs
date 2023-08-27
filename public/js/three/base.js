@@ -18,6 +18,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.set(0, 2, 10);
 
+
 // 캔버스 생성 및 라이트닝 조건 설정
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
