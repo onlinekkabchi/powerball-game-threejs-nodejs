@@ -37,7 +37,7 @@ const selectElement = document.getElementById("modelSelect");
 
 function selectOption() {
   const selected = selectElement.value;
-  console.log(selected);
+  console.log(selectElement.value);
   return;
 }
 
