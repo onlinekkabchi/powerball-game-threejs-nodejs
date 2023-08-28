@@ -7,12 +7,13 @@ export class Fox {
   constructor(scene) {
     this.gltfloader = new GLTFLoader();
     this.model = this.gltfloader.load(
-      "./static/model/fox.glb",
+      "./static/model/fox/fox.gltf",
       function (gltf) {
         const model = gltf.scene;
         model.position.set(5, 0, 0);
         model.scale.set(0.03, 0.03, 0.03);
         scene.add(model);
+        console.log("fox");
         console.log(model);
       },
       function (xhr) {
