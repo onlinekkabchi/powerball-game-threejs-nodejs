@@ -20,7 +20,7 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1b1b1b);
 
 // helper 세팅
-scene.add(gridHelper, axesHelper);
+// scene.add(gridHelper, axesHelper);
 
 // 카메라, 랜더러 추가
 orbitController(camera, renderer);
