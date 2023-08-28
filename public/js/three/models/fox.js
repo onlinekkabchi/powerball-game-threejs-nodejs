@@ -13,8 +13,8 @@ export class Fox {
         model.position.set(5, 0, 0);
         model.scale.set(0.03, 0.03, 0.03);
         scene.add(model);
-        console.log("fox");
-        console.log(model);
+        // console.log("fox");
+        // console.log(model);
       },
       function (xhr) {
         console.log((xhr.loaded / xhr.total) * 100 + "% loaded");

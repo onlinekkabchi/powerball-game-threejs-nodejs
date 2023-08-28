@@ -3,7 +3,7 @@ import * as THREE from "three";
 // 그리드 세팅
 const gridSize = 80;
 const gridDivisions = 80;
-const gridColor = "0xffff80";
+const gridColor = 0xffff80;
 const gridHelper = new THREE.GridHelper(
   gridSize,
   gridDivisions,

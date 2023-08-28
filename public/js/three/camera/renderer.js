@@ -22,6 +22,8 @@ renderer.shadowMap.enabled = true;
 renderer.toneMapping = toneMappingOptions.Cineon;
 renderer.toneMappingExposure = params.exposure;
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth * 0.9, window.innerHeight * 0.9);
+
+// 캔버스 사이즈
+renderer.setSize(window.innerWidth, window.innerHeight);
 
 export { renderer };
