@@ -9,7 +9,7 @@ export default function egg(scene) {
     function (gltf) {
       const model = gltf.scene;
       model.position.set(1, 10, 0);
-      model.scale.set(1, 1, 1);
+      model.scale.set(0.5, 0.5, 0.5);
       scene.add(model);
     },
     undefined,
