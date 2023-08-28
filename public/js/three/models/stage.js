@@ -21,9 +21,9 @@ function stage(scene) {
       // console.log(gltf);
       // console.log(model);
 
-      model.children.forEach((el) => {
-        el.material = glossyMat;
-      });
+      // model.children.forEach((el) => {
+      //   el.material = glossyMat;
+      // });
 
       model.position.set(1, 0, 0);
       model.scale.set(1, 1, 1);
