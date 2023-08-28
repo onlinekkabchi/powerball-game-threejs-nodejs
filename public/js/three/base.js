@@ -17,16 +17,16 @@ scene.background = new THREE.Color(0x1b1b1b);
 let mixer = null;
 
 // 그리드 세팅
-// const gridSize = 80;
-// const gridDivisions = 80;
-// const gridColor = "0xffff80";
-// const gridHelper = new THREE.GridHelper(
-//   gridSize,
-//   gridDivisions,
-//   gridColor,
-//   gridColor
-// );
-// scene.add(gridHelper);
+const gridSize = 80;
+const gridDivisions = 80;
+const gridColor = "0xffff80";
+const gridHelper = new THREE.GridHelper(
+  gridSize,
+  gridDivisions,
+  gridColor,
+  gridColor
+);
+scene.add(gridHelper);
 
 // 축 세팅
 const axesHelper = new THREE.AxesHelper(5);
@@ -79,7 +79,7 @@ controls.update();
 document.body.appendChild(renderer.domElement);
 
 // 큐브 추가
-scene.add(cube1, cube2, stageFlag);
+scene.add(cube2, stageFlag);
 
 // 무대 원본, 베이킹본
 stage(scene);
@@ -103,17 +103,27 @@ lottery("./static/model/lottery-machine1.glb", scene);
 // loadLottery();
 
 // 여우
-// const fox = new Fox(scene);
+const fox = new Fox(scene);
 
 // 빛!
-scene.add(dirLight, hemiLight, bulbLight);
+scene.add(dirLight, bulbLight, hemiLight);
+
+const radius = 5;
+const angularSpeed = 1;
 
 // 큐브 추가 및 움직임
 function render() {
-  cube1.rotation.x += 0.03;
-  cube1.rotation.y += 0.03;
+  cube2.rotation.x += 0.03;
+  // cube1.rotation.y += 0.03;
   cube2.rotation.y += 0.03;
   stageFlag.rotation.y += 0.05;
+
+  // 전구 원운동
+  const time = performance.now() * 0.001; // Convert to seconds
+  const bulbX = radius * Math.cos(angularSpeed * time);
+  const bulbZ = radius * Math.sin(angularSpeed * time);
+  bulbLight.position.set(bulbX, 1, bulbZ);
+  cube1.position.set(bulbX, 1, bulbZ);
 
   // 파이널 랜더링
   renderer.render(scene, camera);
