@@ -4,14 +4,14 @@
 import { gridHelper, axesHelper } from "./helper/helper.js";
 import { camera, orbitController } from "./camera/camera.js";
 import { renderer } from "./camera/renderer.js";
-import { dirLight, bulbLight, hemiLight } from "./light.js";
+import { dirLight, bulbLight, hemiLight } from "./light/light.js";
 // import { scene, sceneBaked } from "./scene.js";
-import { cube1, cube2, stageFlag } from "./cube.js";
-import { stage, stageBaked } from "./stage.js";
-import egg from "./egg.js";
-import { lottery, objLottery } from "./lottery-machine.js";
+import { cube1, cube2, stageFlag } from "./models/cube.js";
+import { stage, stageBaked } from "./models/stage.js";
+import egg from "./models/egg.js";
+import { lottery, objLottery } from "./models/lottery-machine.js";
 // import fox from "./fox.js";
-import { Fox } from "./fox.js";
+import { Fox } from "./models/fox.js";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1b1b1b);
@@ -19,29 +19,7 @@ scene.background = new THREE.Color(0x1b1b1b);
 // helper 세팅
 scene.add(gridHelper, axesHelper);
 
-// // 캔버스 생성 및 랜더링 조건 설정
-// const params = {
-//   exposure: 1.0,
-//   toneMapping: "ACESFilmic",
-//   blurriness: 0.3,
-//   intensity: 1.0,
-// };
-// const toneMappingOptions = {
-//   None: THREE.NoToneMapping,
-//   Linear: THREE.LinearToneMapping,
-//   Reinhard: THREE.ReinhardToneMapping,
-//   Cineon: THREE.CineonToneMapping,
-//   ACESFilmic: THREE.ACESFilmicToneMapping,
-//   Custom: THREE.CustomToneMapping,
-// };
-// const renderer = new THREE.WebGLRenderer({ antialias: true });
-// renderer.shadowMap.enabled = true;
-// // renderer.toneMapping = THREE.ReinhardToneMapping;
-// renderer.toneMapping = toneMappingOptions.Cineon;
-// renderer.toneMappingExposure = params.exposure;
-// renderer.setPixelRatio(window.devicePixelRatio);
-// renderer.setSize(window.innerWidth * 0.9, window.innerHeight * 0.9);
-
+// 카메라, 랜더러 추가
 orbitController(camera, renderer);
 
 // 캔버스 추가
@@ -74,13 +52,14 @@ lottery("./static/model/lottery-machine1.glb", scene);
 // 여우
 const fox = new Fox(scene);
 
-// 빛!
+// 빛 추가!
 scene.add(dirLight, bulbLight, hemiLight);
 
 const radius = 5;
 const angularSpeed = 1;
+const eggSpeed = 2;
 
-// 큐브 추가 및 움직임
+// 랜더링 함수
 function render() {
   cube2.rotation.x += 0.03;
   // cube1.rotation.y += 0.03;
@@ -92,7 +71,11 @@ function render() {
   const bulbX = radius * Math.cos(angularSpeed * time);
   const bulbZ = radius * Math.sin(angularSpeed * time);
   bulbLight.position.set(bulbX, 1, bulbZ);
-  cube1.position.set(bulbX, 1, bulbZ);
+
+  // // 달걀 원운동 // cannot read the undefined of 'set' 에러 뜸
+  // const eggX = radius * Math.cos(eggSpeed * time);
+  // const eggZ = radius * Math.sin(eggSpeed * time);
+  // fox.position.set(eggX, 1, eggZ);
 
   // 파이널 랜더링
   renderer.render(scene, camera);
