@@ -1,18 +1,21 @@
 ﻿import * as THREE from "three";
-// import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
+// threejs 인스턴스
 import { gridHelper, axesHelper } from "./helper/helper.js";
 import { camera, orbitController } from "./camera/camera.js";
 import { renderer } from "./camera/renderer.js";
 import { dirLight, bulbLight, hemiLight } from "./light/light.js";
-// import { scene, sceneBaked } from "./scene.js";
+
+// 모델
 import { cube1, cube2, stageFlag } from "./models/cube.js";
 import { stage, stageBaked } from "./models/stage.js";
 import egg from "./models/egg.js";
-import { lottery, objLottery } from "./models/lottery-machine.js";
+import Lottery from "./models/lottery-machine-class.js";
+// import { Lottery, objLottery } from "./models/lottery-machine.js";
 // import fox from "./fox.js";
 import { Fox } from "./models/fox.js";
 
+// 씬 세팅
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1b1b1b);
 
@@ -36,18 +39,11 @@ stage(scene);
 egg(scene);
 
 // 로터리 머신 비동기함수
-lottery("./static/model/lottery-machine1.glb", scene);
-// const loadLottery = async () => {
-//   await gltfLoader.loadAsync("./static/model/lottery-machine1.glb").then(
-//     (model) => scene.add(model.scene),
-//     (error) => {
-//       console.log("model error: " + error);
-//     }
-//   );
-// };
-// objLottery(scene);
+// lottery("./static/model/lottery-machine1.glb", scene);
 
-// loadLottery();
+// 로터리 머신 클래스
+const lotmachine = new Lottery("./static/model/lottery-machine1.glb", scene);
+lotmachine.load();
 
 // 여우
 const fox = new Fox(scene);
@@ -86,4 +82,10 @@ function animate() {
   render();
 }
 
+function show() {
+  console.log(lotmachine);
+  lotmachine.show();
+}
+
 animate();
+show();

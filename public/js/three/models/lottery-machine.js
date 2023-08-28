@@ -30,4 +30,4 @@ async function objLottery(scene) {
     };
 }
 
-export { lottery, objLottery };
+export { objLottery };
