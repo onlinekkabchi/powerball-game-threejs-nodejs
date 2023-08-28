@@ -1,14 +1,32 @@
 ﻿import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 
 // import { scene, sceneBaked } from "./scene.js";
 import { cube1, cube2, stageFlag } from "./cube.js";
 import { stage, stageBaked } from "./stage.js";
 import egg from "./egg.js";
-import { lottery } from "./lottery-machine.js";
+import { lottery, objLottery } from "./lottery-machine.js";
+import fox from "./fox.js";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1b1b1b);
+
+// 그리드 세팅
+const gridSize = 80;
+const gridDivisions = 80;
+const gridColor = "0xffff80";
+const gridHelper = new THREE.GridHelper(
+  gridSize,
+  gridDivisions,
+  gridColor,
+  gridColor
+);
+scene.add(gridHelper);
+
+// 축 세팅
+const axesHelper = new THREE.AxesHelper(5);
+scene.add(axesHelper);
 
 // 카메라 세팅
 const camera = new THREE.PerspectiveCamera(
@@ -67,7 +85,21 @@ stage(scene);
 egg(scene);
 
 // 로터리 머신 비동기함수
-lottery(scene);
+lottery("./static/model/lottery-machine1.glb", scene);
+// const loadLottery = async () => {
+//   await gltfLoader.loadAsync("./static/model/lottery-machine1.glb").then(
+//     (model) => scene.add(model.scene),
+//     (error) => {
+//       console.log("model error: " + error);
+//     }
+//   );
+// };
+// objLottery(scene);
+
+// loadLottery();
+
+// 여우
+fox(scene);
 
 // 빛!
 const light = new THREE.DirectionalLight(0xd5deff);
