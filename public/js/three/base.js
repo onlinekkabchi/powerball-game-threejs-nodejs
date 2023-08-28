@@ -7,22 +7,25 @@ import { cube1, cube2, stageFlag } from "./cube.js";
 import { stage, stageBaked } from "./stage.js";
 import egg from "./egg.js";
 import { lottery, objLottery } from "./lottery-machine.js";
-import fox from "./fox.js";
+// import fox from "./fox.js";
+import { Fox } from "./fox.js";
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x1b1b1b);
 
+let mixer = null;
+
 // 그리드 세팅
-const gridSize = 80;
-const gridDivisions = 80;
-const gridColor = "0xffff80";
-const gridHelper = new THREE.GridHelper(
-  gridSize,
-  gridDivisions,
-  gridColor,
-  gridColor
-);
-scene.add(gridHelper);
+// const gridSize = 80;
+// const gridDivisions = 80;
+// const gridColor = "0xffff80";
+// const gridHelper = new THREE.GridHelper(
+//   gridSize,
+//   gridDivisions,
+//   gridColor,
+//   gridColor
+// );
+// scene.add(gridHelper);
 
 // 축 세팅
 const axesHelper = new THREE.AxesHelper(5);
@@ -99,7 +102,8 @@ lottery("./static/model/lottery-machine1.glb", scene);
 // loadLottery();
 
 // 여우
-fox(scene);
+// fox(scene);
+const fox = new Fox(scene);
 
 // 빛!
 const light = new THREE.DirectionalLight(0xd5deff);
