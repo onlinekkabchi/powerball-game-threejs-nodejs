@@ -10,9 +10,9 @@ function stage(scene) {
     function (gltf) {
       const model = gltf.scene;
 
-      console.log("stage-origin");
-      console.log(gltf);
-      console.log(model);
+      // console.log("stage-origin");
+      // console.log(gltf);
+      // console.log(model);
 
       model.position.set(1, 0, 0);
       model.scale.set(1, 1, 1);

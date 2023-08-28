@@ -7,9 +7,11 @@ const objLoader = new ObjectLoader();
 async function lottery(path, gscene) {
   //   로터리 머신
   const file = await gltfLoader.loadAsync(path);
-  console.log("lottery file");
-  console.log(file);
+
   const model = file.scene;
+  console.log(model);
+  console.log(model.children[17]);
+
   model.position.set(0, -5, 0);
   model.scale.set(20, 20, 20);
   gscene.add(model);
