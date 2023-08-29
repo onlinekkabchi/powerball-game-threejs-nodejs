@@ -7,10 +7,9 @@ import { renderer } from "./camera/renderer.js";
 import {
   ambientLight,
   dirLight,
-  bulbLight,
   hemiLight,
   dirLightHelper,
-  heimLightHelper,
+  hemiLightHelper,
 } from "./light/light.js";
 
 import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
@@ -73,17 +72,17 @@ function init() {
   lotmachine.load();
 
   // 여우
-  const fox = new Fox(currentScene);
+  // const fox = new Fox(currentScene);
 
   // 빛 추가!
   // currentScene.add(ambientLight, hemiLight);
   currentScene.add(
-    dirLight,
-    bulbLight,
+    // dirLight,
+
     hemiLight,
-    ambientLight,
-    dirLightHelper,
-    heimLightHelper
+    // ambientLight,
+    dirLightHelper
+    // hemiLightHelper
   );
   currentScene.add(pointLight, pointLightHelper);
   // currentScene.add(rectLight1, rectLight2, rectLight3);
@@ -98,9 +97,9 @@ function render() {
 
   // 전구 원운동
   const time = performance.now() * 0.001; // Convert to seconds
-  const bulbX = radius * Math.cos(angularSpeed * time);
-  const bulbZ = radius * Math.sin(angularSpeed * time);
-  bulbLight.position.set(bulbX, 1, bulbZ);
+  // const bulbX = radius * Math.cos(angularSpeed * time);
+  // const bulbZ = radius * Math.sin(angularSpeed * time);
+  // bulbLight.position.set(bulbX, 1, bulbZ);
 
   // lotmachine.animate();
 

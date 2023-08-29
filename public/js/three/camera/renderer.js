@@ -2,7 +2,7 @@ import * as THREE from "three";
 
 // 캔버스 생성 및 랜더링 조건 설정
 const params = {
-  exposure: 1.0,
+  exposure: 0.57,
   toneMapping: "ACESFilmic",
   blurriness: 0.3,
   intensity: 1.0,
@@ -22,7 +22,7 @@ renderer.shadowMap.enabled = true;
 // renderer.toneMapping = THREE.ReinhardToneMapping;
 renderer.toneMapping = toneMappingOptions.ACESFilmic;
 // renderer.toneMapping = toneMappingOptions.Reinhard;
-renderer.toneMappingExposure = params.exposure;
+renderer.toneMappingExposure = Math.pow(params.exposure, 5.0);
 renderer.outputColorSpace = THREE.outputColorSpace;
 renderer.setPixelRatio(window.devicePixelRatio);
 
