@@ -19,8 +19,9 @@ const toneMappingOptions = {
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
 // renderer.toneMapping = THREE.ReinhardToneMapping;
-renderer.toneMapping = toneMappingOptions.Cineon;
+renderer.toneMapping = toneMappingOptions.Linear;
 renderer.toneMappingExposure = params.exposure;
+renderer.outputColorSpace = THREE.outputColorSpace;
 renderer.setPixelRatio(window.devicePixelRatio);
 
 // 캔버스 사이즈

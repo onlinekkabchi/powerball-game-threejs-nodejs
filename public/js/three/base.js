@@ -21,7 +21,7 @@ import { hdrEquirect } from "./camera/hdr.js";
 // 씬 세팅
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color(0x1b1b1b);
-scene.background = hdrEquirect;
+hdrEquirect(scene);
 
 // helper 세팅
 // scene.add(gridHelper, axesHelper);
