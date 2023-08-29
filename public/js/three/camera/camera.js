@@ -8,17 +8,20 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.set(0, 2, 10);
+camera.position.set(0, 4, 10);
 
 // 카메라 궤도 컨트롤러
 function orbitController(camera, renderer) {
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.minDistance = 3;
   controls.maxDistance = 100;
-  controls.maxPolarAngle = Math.PI / 2;
+  // controls.maxPolarAngle = Math.PI / 2;
+
   controls.target.set(0, 1, 0);
   // 줌 비활성화
   // controls.enableZoom = false;
+  // 회전 비활성화
+  // controls.enableRotate = false;
   controls.update();
 }
 

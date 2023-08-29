@@ -13,9 +13,9 @@ const glass1 = new THREE.MeshPhongMaterial({
   //   reflectivity: 0.9,
 });
 
-const normalMap = textureLoader.load(
-  "../../../static/texture/Studio_Lighting_05.jpeg"
-);
+const normalMapPath = "../../../static/texture/Window_Lighting_01.jpeg";
+// "../../../static/texture/Studio_Lighting_05.jpeg"
+const normalMap = textureLoader.load(normalMapPath);
 normalMap.wrapS = THREE.RepeatWrapping;
 normalMap.wrapT = THREE.RepeatWrapping;
 normalMap.repeat.x = 10;
@@ -85,16 +85,22 @@ export default class Lottery {
     this.path = path;
     this.scene = scene;
     // this.gltfloader =
+    this.file = null;
     this.model = null;
     this.mixer = null;
   }
   async load() {
     const file = await loader.loadAsync(this.path);
-
     this.model = file.scene;
+
+    console.log("lottery machine");
     console.log(file);
-    console.log(this.model);
-    console.log(this.model.children[4]);
+    // console.log(this.model);
+    // console.log(this.model.children[4]);
+
+    // 로터리 머신 애니메이션
+    this.mixer = new THREE.AnimationMixer(this.model);
+    // this.mixer.clipAction(file.animations[0]).play();
 
     // 유리 씌우기
     const dom = this.model.children[4];
@@ -105,7 +111,8 @@ export default class Lottery {
 
     this.scene.add(this.model);
   }
-  show() {
-    console.log("show lotmachine");
+  animate() {
+    console.log(this);
+    // this.mixer.clipAction(this.file.animations[0]).play();
   }
 }

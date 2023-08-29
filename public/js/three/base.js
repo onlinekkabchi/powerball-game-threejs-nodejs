@@ -4,7 +4,17 @@
 // import { gridHelper, axesHelper } from "./helper/helper.js";
 import { camera, orbitController } from "./camera/camera.js";
 import { renderer } from "./camera/renderer.js";
-import { dirLight, bulbLight, hemiLight } from "./light/light.js";
+import {
+  ambientLight,
+  dirLight,
+  bulbLight,
+  hemiLight,
+  dirLightHelper,
+  heimLightHelper,
+} from "./light/light.js";
+
+import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
+import { pointLight, pointLightHelper } from "./light/light-point.js";
 
 // 모델
 import { cube1, cube2, stageFlag } from "./models/cube.js";
@@ -16,47 +26,68 @@ import Lottery from "./models/lottery-machine-class.js";
 import { Fox } from "./models/fox.js";
 
 // 텍스쳐
-import { hdrEquirect, hdrLoader } from "./camera/hdr.js";
-
-// 씬 세팅
-const scene = new THREE.Scene();
-// scene.background = new THREE.Color(0x1b1b1b);
-scene.background = hdrLoader;
-
-// helper 세팅
-// scene.add(gridHelper, axesHelper);
-
-// 카메라, 랜더러 추가
-orbitController(camera, renderer);
-
-// 캔버스 추가
-document.body.appendChild(renderer.domElement);
-
-// 큐브 추가
-scene.add(cube2, stageFlag);
-
-// 무대 원본, 베이킹본
-stage(scene);
-// stageBaked(scene);
-
-// 달걀
-// egg(scene);
-
-// 로터리 머신 비동기함수
-// lottery("./static/model/lottery-machine1.glb", scene);
-
-// 로터리 머신 클래스
-const lotmachine = new Lottery("./static/model/lottery-machine1.glb", scene);
-lotmachine.load();
-
-// 여우
-// const fox = new Fox(scene);
-
-// 빛 추가!
-scene.add(dirLight, bulbLight, hemiLight);
+import { hdrLoader } from "./camera/hdr.js";
 
 const radius = 5;
 const angularSpeed = 1;
+
+let currentCamera, currentScene, currentRenderer;
+let lotmachine;
+
+function init() {
+  // 씬 세팅
+  currentScene = new THREE.Scene();
+  currentScene.background = new THREE.Color(0x1b1b1b);
+  // currentScene.background = hdrLoader; // 백그라운드 hdr 넣을지 안넣을지? post-processing때 처리할것.
+
+  // helper 세팅
+  // scene.add(gridHelper, axesHelper);
+
+  // 카메라, 랜더러 추가
+  currentCamera = camera;
+  currentRenderer = renderer;
+  orbitController(currentCamera, currentRenderer);
+
+  // 캔버스 추가
+  document.body.appendChild(renderer.domElement);
+
+  // 시계
+  // const clock = new THREE.Clock();
+
+  // 큐브 추가
+  currentScene.add(cube1, cube2);
+
+  // 무대 원본, 베이킹본
+  // stage(currentScene);
+  stageBaked(currentScene);
+
+  // 달걀
+  // egg(scene);
+
+  // 로터리 머신 비동기함수
+  // lottery("./static/model/lottery-machine1.glb", scene);
+
+  // 로터리 머신 클래스
+  const lotteryPath = "./static/model/lottery-machine/lottery-machine2.glb";
+  lotmachine = new Lottery(lotteryPath, currentScene);
+  lotmachine.load();
+
+  // 여우
+  const fox = new Fox(currentScene);
+
+  // 빛 추가!
+  // currentScene.add(ambientLight, hemiLight);
+  currentScene.add(
+    dirLight,
+    bulbLight,
+    hemiLight,
+    ambientLight,
+    dirLightHelper,
+    heimLightHelper
+  );
+  currentScene.add(pointLight, pointLightHelper);
+  // currentScene.add(rectLight1, rectLight2, rectLight3);
+}
 
 // 랜더링 함수
 function render() {
@@ -71,8 +102,10 @@ function render() {
   const bulbZ = radius * Math.sin(angularSpeed * time);
   bulbLight.position.set(bulbX, 1, bulbZ);
 
+  // lotmachine.animate();
+
   // 파이널 랜더링
-  renderer.render(scene, camera);
+  renderer.render(currentScene, currentCamera);
 }
 
 function animate() {
@@ -80,10 +113,5 @@ function animate() {
   render();
 }
 
-function show() {
-  console.log(lotmachine);
-  lotmachine.show();
-}
-
+init();
 animate();
-show();

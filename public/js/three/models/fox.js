@@ -10,6 +10,7 @@ export class Fox {
       "./static/model/fox/fox.gltf",
       function (gltf) {
         const model = gltf.scene;
+        model.castShadow = true;
         model.position.set(5, 0, 0);
         model.scale.set(0.03, 0.03, 0.03);
         scene.add(model);
