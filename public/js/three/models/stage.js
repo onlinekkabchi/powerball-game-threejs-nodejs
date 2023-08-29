@@ -28,9 +28,9 @@ const glossyMat = new THREE.MeshStandardMaterial({
   metalness: params.metalness,
   roughness: params.roughness,
   // 반사광
-  envMap: hdrLoader,
-  envMapIntensity: params.envMapIntensity,
-  reflectivity: params.reflectivity,
+  // envMap: hdrLoader,
+  // envMapIntensity: params.envMapIntensity,
+  // reflectivity: params.reflectivity,
   name: "gray1",
 });
 
@@ -49,7 +49,7 @@ function stage(scene) {
         el.material = glossyMat;
       });
 
-      model.position.set(1, 0, 0);
+      model.position.set(0, 0, 0);
       model.scale.set(1, 1, 1);
       scene.add(model);
     },
@@ -71,7 +71,7 @@ function stageBaked(scene) {
 
       console.log(model);
 
-      model.position.set(1, 0, 0);
+      model.position.set(0, 0, 0);
       model.scale.set(1, 1, 1);
       scene.add(model);
     },

@@ -36,7 +36,7 @@ let lotmachine;
 function init() {
   // 씬 세팅
   currentScene = new THREE.Scene();
-  currentScene.background = new THREE.Color(0x1b1b1b);
+  currentScene.background = new THREE.Color(0x1a1a1a);
   // currentScene.background = hdrLoader; // 백그라운드 hdr 넣을지 안넣을지? post-processing때 처리할것.
 
   // helper 세팅

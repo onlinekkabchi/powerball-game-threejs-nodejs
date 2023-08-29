@@ -6,11 +6,18 @@ const loader = new GLTFLoader();
 const textureLoader = new THREE.TextureLoader();
 
 // 유리 질감 샘플
-const glass1 = new THREE.MeshPhongMaterial({
+let options = {
+  roughness: 0,
+  transmission: 1,
+  thickness: 2,
+};
+const glass1 = new THREE.MeshPhysicalMaterial({
   color: 0xccddff,
-  //   envMap: textureCube,
-  refractionRatio: 0.98,
+  metalness: 0,
+  roughness: 0,
+  // refractionRatio: 0.98,
   //   reflectivity: 0.9,
+  transmission: options.transmission,
 });
 
 const normalMapPath = "../../../static/texture/Window_Lighting_01.jpeg";
@@ -26,7 +33,7 @@ const params = {
   transmission: 1,
   opacity: 1,
   metalness: 0,
-  roughness: 0,
+  roughness: 0.2,
   clearcoat: 1,
   clearcoatRoughness: 1,
   ior: 1.5,
@@ -38,6 +45,8 @@ const params = {
   exposure: 1,
   refractionRatio: 0.98,
   reflectivity: 0.9,
+  attenuationColor: 0xffffff,
+  attenuationDistance: 1,
 };
 
 // const texture = new THREE.CanvasTexture(generateTexture());
@@ -59,13 +68,19 @@ const glasstransparent = new THREE.MeshPhysicalMaterial({
   // normalScale: new THREE.Vector2(0.15, 0.15),
   envMapIntensity: params.envMapIntensity,
   transmission: params.transmission, // use material.transmission for glass materials
-  // specularIntensity: params.specularIntensity,
-  // specularColor: params.specularColor,
+  specularIntensity: params.specularIntensity,
+  specularColor: params.specularColor,
   opacity: params.opacity,
-  //   refractionRatio: params.refractionRatio,
+  refractionRatio: params.refractionRatio,
   reflectivity: params.reflectivity,
   side: THREE.DoubleSide,
   transparent: true,
+
+  emissive: 0xffffff,
+  emissiveIntensity: 1,
+
+  attenuationColor: params.attenuationColor,
+  attenuationDistance: params.attenuationDistance,
 });
 
 // function generateTexture() {
@@ -84,7 +99,6 @@ export default class Lottery {
   constructor(path, scene) {
     this.path = path;
     this.scene = scene;
-    // this.gltfloader =
     this.file = null;
     this.model = null;
     this.mixer = null;
@@ -104,7 +118,7 @@ export default class Lottery {
 
     // 유리 씌우기
     const dom = this.model.children[4];
-    dom.material = glasstransparent;
+    dom.material = glass1;
 
     this.model.position.set(0, -5, 0);
     this.model.scale.set(20, 20, 20);
