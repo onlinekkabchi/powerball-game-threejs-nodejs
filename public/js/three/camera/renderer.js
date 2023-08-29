@@ -25,5 +25,6 @@ renderer.setPixelRatio(window.devicePixelRatio);
 
 // 캔버스 사이즈
 renderer.setSize(window.innerWidth, window.innerHeight);
+// renderer.setViewport(1, 1, window.innerWidth, window.innerHeight);
 
 export { renderer };

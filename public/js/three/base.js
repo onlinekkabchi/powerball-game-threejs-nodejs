@@ -15,9 +15,13 @@ import Lottery from "./models/lottery-machine-class.js";
 // import fox from "./fox.js";
 import { Fox } from "./models/fox.js";
 
+// 텍스쳐
+import { hdrEquirect } from "./camera/hdr.js";
+
 // 씬 세팅
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1b1b1b);
+// scene.background = new THREE.Color(0x1b1b1b);
+scene.background = hdrEquirect;
 
 // helper 세팅
 // scene.add(gridHelper, axesHelper);
