@@ -1,7 +1,7 @@
 ﻿import * as THREE from "three";
 
 // threejs 인스턴스
-import { gridHelper, axesHelper } from "./helper/helper.js";
+// import { gridHelper, axesHelper } from "./helper/helper.js";
 import { camera, orbitController } from "./camera/camera.js";
 import { renderer } from "./camera/renderer.js";
 import { dirLight, bulbLight, hemiLight } from "./light/light.js";
@@ -24,7 +24,7 @@ const scene = new THREE.Scene();
 scene.background = hdrLoader;
 
 // helper 세팅
-scene.add(gridHelper, axesHelper);
+// scene.add(gridHelper, axesHelper);
 
 // 카메라, 랜더러 추가
 orbitController(camera, renderer);
@@ -40,7 +40,7 @@ stage(scene);
 // stageBaked(scene);
 
 // 달걀
-egg(scene);
+// egg(scene);
 
 // 로터리 머신 비동기함수
 // lottery("./static/model/lottery-machine1.glb", scene);
@@ -50,14 +50,13 @@ const lotmachine = new Lottery("./static/model/lottery-machine1.glb", scene);
 lotmachine.load();
 
 // 여우
-const fox = new Fox(scene);
+// const fox = new Fox(scene);
 
 // 빛 추가!
 scene.add(dirLight, bulbLight, hemiLight);
 
 const radius = 5;
 const angularSpeed = 1;
-const eggSpeed = 2;
 
 // 랜더링 함수
 function render() {
@@ -71,11 +70,6 @@ function render() {
   const bulbX = radius * Math.cos(angularSpeed * time);
   const bulbZ = radius * Math.sin(angularSpeed * time);
   bulbLight.position.set(bulbX, 1, bulbZ);
-
-  // // 달걀 원운동 // cannot read the undefined of 'set' 에러 뜸
-  // const eggX = radius * Math.cos(eggSpeed * time);
-  // const eggZ = radius * Math.sin(eggSpeed * time);
-  // fox.position.set(eggX, 1, eggZ);
 
   // 파이널 랜더링
   renderer.render(scene, camera);

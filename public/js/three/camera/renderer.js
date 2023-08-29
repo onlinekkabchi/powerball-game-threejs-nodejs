@@ -19,7 +19,8 @@ const toneMappingOptions = {
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.shadowMap.enabled = true;
 // renderer.toneMapping = THREE.ReinhardToneMapping;
-renderer.toneMapping = toneMappingOptions.Linear;
+// renderer.toneMapping = toneMappingOptions.ACESFilmic;
+renderer.toneMapping = toneMappingOptions.Reinhard;
 renderer.toneMappingExposure = params.exposure;
 renderer.outputColorSpace = THREE.outputColorSpace;
 renderer.setPixelRatio(window.devicePixelRatio);
