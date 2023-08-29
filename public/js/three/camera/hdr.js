@@ -1,7 +1,15 @@
 import * as THREE from "three";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 
-const hdrLoader = new RGBELoader();
+const hdrLoader = new RGBELoader().load(
+  "../../../static/texture/MR_INT-005_WhiteNeons_NAD.hdr",
+  function (texture) {
+    console.log("hdrtexture!!");
+
+    texture.mapping = THREE.EquirectangularReflectionMapping;
+    //   scene.background = texture;
+  }
+);
 
 // 씬 배경
 function hdrEquirect(scene) {
@@ -17,4 +25,4 @@ function hdrEquirect(scene) {
   );
 }
 
-export { hdrEquirect };
+export { hdrEquirect, hdrLoader };

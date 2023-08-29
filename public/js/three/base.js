@@ -16,15 +16,15 @@ import Lottery from "./models/lottery-machine-class.js";
 import { Fox } from "./models/fox.js";
 
 // 텍스쳐
-import { hdrEquirect } from "./camera/hdr.js";
+import { hdrEquirect, hdrLoader } from "./camera/hdr.js";
 
 // 씬 세팅
 const scene = new THREE.Scene();
 // scene.background = new THREE.Color(0x1b1b1b);
-hdrEquirect(scene);
+scene.background = hdrLoader;
 
 // helper 세팅
-// scene.add(gridHelper, axesHelper);
+scene.add(gridHelper, axesHelper);
 
 // 카메라, 랜더러 추가
 orbitController(camera, renderer);
