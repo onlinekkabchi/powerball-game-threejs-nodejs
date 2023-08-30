@@ -12,10 +12,10 @@ const camera = new THREE.OrthographicCamera(
   width / 2,
   height / 2,
   height / -2,
-  -50,
+  -100,
   200 // 카메라 거리
 );
-camera.position.set(0, 5, 1);
+camera.position.set(0, 5, 10);
 // camera.lookAt(0, 0, 0);
 
 // 카메라 궤도 컨트롤러
