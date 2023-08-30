@@ -29,15 +29,16 @@ const ambientLight = new THREE.AmbientLight(light.ambient);
 // 전체 광
 const dirLight = new THREE.DirectionalLight(light.directional);
 dirLight.position.set(0, 200, 0);
-dirLight.intensity = 10;
+dirLight.intensity = 1;
 
 const dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 3);
 
 // 반사광
 const hemiLight = new THREE.HemisphereLight(light.hemiSky, light.heimGround, 1);
 hemiLight.position.set(0, 10, 0);
+hemiLight.scale.set(10, 10, 10);
 // hemiLight.intensity = hemiLuminousIrradiances["living room"];
-hemiLight.intensity = 100;
+hemiLight.intensity = 10;
 
 const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 5);
 

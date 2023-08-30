@@ -9,10 +9,17 @@ const material1 = new THREE.MeshStandardMaterial({
   color: 0xffffff,
 });
 // const material2 = new THREE.MeshBasicMaterial({ color: 0x00ffff });
-const material2 = new THREE.MeshStandardMaterial({
+const material2 = new THREE.MeshPhysicalMaterial({
   color: 0xffffff,
-  roughness: 0.1,
   metalness: 0,
+  roughness: 0,
+  transparent: 1,
+  // refractionRatio: 0.98,
+  //   reflectivity: 0.9,
+  transmission: 1,
+  // envMap: hdrLoader,
+  // envMapIntensity: 0.1,
+  thickness: 0.1,
 });
 const material3 = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 
