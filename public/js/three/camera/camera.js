@@ -12,11 +12,11 @@ const camera = new THREE.OrthographicCamera(
   width / 2,
   height / 2,
   height / -2,
-  1,
-  100 // 카메라 거리
+  -50,
+  200 // 카메라 거리
 );
-camera.position.set(0, 10, 1);
-camera.lookAt(0, 0, 0);
+camera.position.set(0, 5, 1);
+// camera.lookAt(0, 0, 0);
 
 // 카메라 궤도 컨트롤러
 function orbitController(camera, renderer) {

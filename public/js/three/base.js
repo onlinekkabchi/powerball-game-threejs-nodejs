@@ -75,7 +75,8 @@ function init() {
 
   // 로터리 머신 클래스
   // const lotteryPath = "./static/model/lottery-machine/lottery-machine2.glb";
-  // lotmachine = new Lottery(lotteryPath, currentScene);
+  const lotteryPath = "./static/model/lottery-machine/ball-collision-2-1.glb";
+  lotmachine = new Lottery(lotteryPath, currentScene);
   // lotmachine.load();
 
   // 여우
