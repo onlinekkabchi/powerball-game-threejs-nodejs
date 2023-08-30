@@ -45,8 +45,8 @@ const params = {
   exposure: 1,
   refractionRatio: 0.98,
   reflectivity: 0.9,
-  attenuationColor: 0xffffff,
-  attenuationDistance: 1,
+  // attenuationColor: 0xffffff,
+  // attenuationDistance: 1,
 };
 
 // const texture = new THREE.CanvasTexture(generateTexture());
