@@ -23,6 +23,7 @@ import Lottery from "./models/lottery-machine-class.js";
 // import { Lottery, objLottery } from "./models/lottery-machine.js";
 // import fox from "./fox.js";
 import { Fox } from "./models/fox.js";
+import { sphere } from "./models/sphere.js";
 
 // 텍스쳐
 import { hdrLoader } from "./camera/hdr.js";
@@ -61,15 +62,18 @@ function init() {
   stageBaked(currentScene);
 
   // 달걀
-  // egg(scene);
+  // egg(currentScene);
+
+  // 구
+  currentScene.add(sphere);
 
   // 로터리 머신 비동기함수
   // lottery("./static/model/lottery-machine1.glb", scene);
 
   // 로터리 머신 클래스
-  const lotteryPath = "./static/model/lottery-machine/lottery-machine2.glb";
-  lotmachine = new Lottery(lotteryPath, currentScene);
-  lotmachine.load();
+  // const lotteryPath = "./static/model/lottery-machine/lottery-machine2.glb";
+  // lotmachine = new Lottery(lotteryPath, currentScene);
+  // lotmachine.load();
 
   // 여우
   // const fox = new Fox(currentScene);
@@ -77,8 +81,7 @@ function init() {
   // 빛 추가!
   // currentScene.add(ambientLight, hemiLight);
   currentScene.add(
-    // dirLight,
-
+    dirLight,
     hemiLight,
     // ambientLight,
     dirLightHelper
@@ -90,18 +93,11 @@ function init() {
 
 // 랜더링 함수
 function render() {
+  cube1.rotation.y += 0.03;
   cube2.rotation.x += 0.03;
-  // cube1.rotation.y += 0.03;
+
   cube2.rotation.y += 0.03;
   stageFlag.rotation.y += 0.05;
-
-  // 전구 원운동
-  const time = performance.now() * 0.001; // Convert to seconds
-  // const bulbX = radius * Math.cos(angularSpeed * time);
-  // const bulbZ = radius * Math.sin(angularSpeed * time);
-  // bulbLight.position.set(bulbX, 1, bulbZ);
-
-  // lotmachine.animate();
 
   // 파이널 랜더링
   renderer.render(currentScene, currentCamera);

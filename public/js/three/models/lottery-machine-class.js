@@ -68,8 +68,8 @@ const glasstransparent = new THREE.MeshPhysicalMaterial({
   // normalScale: new THREE.Vector2(0.15, 0.15),
   envMapIntensity: params.envMapIntensity,
   transmission: params.transmission, // use material.transmission for glass materials
-  specularIntensity: params.specularIntensity,
-  specularColor: params.specularColor,
+  // specularIntensity: params.specularIntensity,
+  // specularColor: params.specularColor,
   opacity: params.opacity,
   refractionRatio: params.refractionRatio,
   reflectivity: params.reflectivity,
@@ -79,8 +79,8 @@ const glasstransparent = new THREE.MeshPhysicalMaterial({
   emissive: 0xffffff,
   emissiveIntensity: 1,
 
-  attenuationColor: params.attenuationColor,
-  attenuationDistance: params.attenuationDistance,
+  // attenuationColor: params.attenuationColor,
+  // attenuationDistance: params.attenuationDistance,
 });
 
 // function generateTexture() {

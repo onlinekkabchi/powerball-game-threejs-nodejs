@@ -5,12 +5,7 @@ const width = window.innerWidth;
 const height = window.innerHeight;
 
 // 카메라 세팅
-const camera = new THREE.PerspectiveCamera(
-  100,
-  ((width * 0.5) / height) * 0.75,
-  1,
-  150
-);
+const camera = new THREE.PerspectiveCamera(100, width / height, 1, 150);
 
 // const camera = new THREE.OrthographicCamera(
 //   width / -2,
