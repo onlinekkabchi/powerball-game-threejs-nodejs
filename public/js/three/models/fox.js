@@ -9,12 +9,15 @@ export class Fox {
     this.model = this.gltfloader.load(
       "./static/model/fox/fox.gltf",
       function (gltf) {
+        console.log("fox");
+        console.log(gltf);
         const model = gltf.scene;
+        model.castShadow = true;
         model.position.set(5, 0, 0);
         model.scale.set(0.03, 0.03, 0.03);
         scene.add(model);
-        console.log("fox");
-        console.log(model);
+        // console.log("fox");
+        // console.log(model);
       },
       function (xhr) {
         console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
