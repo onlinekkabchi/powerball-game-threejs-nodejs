@@ -3,9 +3,9 @@ import { hdrLoader } from "../camera/hdr.js";
 
 const geometry1 = new THREE.SphereGeometry(15, 32, 16);
 const material1 = new THREE.MeshStandardMaterial({
-  //   emissive: 0xffffee,
-  //   emissiveIntensity: 0.1,
-  color: 0xebebeb,
+  emissive: 0xd2d1d1, // 0xff00dd 핫핑크, d2d1d1 연회색
+  emissiveIntensity: 1,
+  color: 0xff00dd,
   roughness: 0,
   metalness: 1, // 반사광있는 금속재질
   //   transmission: 1, // 'transmission' is not a property of this material;
@@ -16,7 +16,9 @@ const material1 = new THREE.MeshStandardMaterial({
 
 const geometry2 = new THREE.SphereGeometry(15, 32, 16);
 const material2 = new THREE.MeshPhysicalMaterial({
-  color: 0xffffff,
+  color: 0xd2d1d1,
+  emissive: 0xd2d1d1,
+  emissiveIntensity: 1,
   metalness: 0,
   roughness: 0,
   transparent: 1,
