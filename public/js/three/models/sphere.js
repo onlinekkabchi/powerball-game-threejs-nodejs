@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { hdrLoader } from "../camera/hdr.js";
 
-const geometry1 = new THREE.SphereGeometry(15, 32, 16);
+const geometry1 = new THREE.SphereGeometry(15, 32, 32);
 const material1 = new THREE.MeshStandardMaterial({
   emissive: 0xd2d1d1, // 0xff00dd 핫핑크, d2d1d1 연회색
   emissiveIntensity: 1,
@@ -14,7 +14,7 @@ const material1 = new THREE.MeshStandardMaterial({
   envMapIntensity: 0.1,
 });
 
-const geometry2 = new THREE.SphereGeometry(15, 32, 16);
+const geometry2 = new THREE.SphereGeometry(15, 32, 32);
 const material2 = new THREE.MeshPhysicalMaterial({
   color: 0xd2d1d1,
   emissive: 0xd2d1d1,
