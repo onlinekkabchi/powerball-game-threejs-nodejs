@@ -21,6 +21,7 @@ import { cube1, cube2, stageFlag } from "./models/cube.js";
 import { stage, stageBaked } from "./models/stage.js";
 import egg from "./models/egg.js";
 import Lottery from "./models/lottery-machine-class.js";
+import { lottery } from "./models/lottery-machine.js";
 // import { Lottery, objLottery } from "./models/lottery-machine.js";
 // import fox from "./fox.js";
 import { Fox } from "./models/fox.js";
@@ -40,8 +41,8 @@ let bulb;
 function init() {
   // 씬 세팅
   currentScene = new THREE.Scene();
-  // currentScene.background = new THREE.Color(0x1a1a1a);
-  currentScene.background = hdrLoader; // 백그라운드 hdr 넣을지 안넣을지? post-processing때 처리할것.
+  currentScene.background = new THREE.Color(0x1a1a1a);
+  // currentScene.background = hdrLoader; // 백그라운드 hdr 넣을지 안넣을지? post-processing때 처리할것.
 
   // helper 세팅
   // scene.add(gridHelper, axesHelper);
@@ -54,9 +55,6 @@ function init() {
   // 캔버스 추가
   document.body.appendChild(renderer.domElement);
 
-  // 시계
-  // const clock = new THREE.Clock();
-
   // 큐브 추가
   currentScene.add(cube1, cube2);
 
@@ -64,25 +62,15 @@ function init() {
   // stage(currentScene);
   stageBaked(currentScene);
 
-  // 달걀
-  // egg(currentScene);
-
   // 구
   currentScene.add(sphere, sphere1);
 
-  // 로터리 머신 비동기함수
-  // lottery("./static/model/lottery-machine1.glb", scene);
-
   // 로터리 머신 클래스
   // const lotteryPath = "./static/model/lottery-machine/lottery-machine2.glb";
+  const lotteryPath = "./static/model/lottery-machine/ball-collision-2-1.glb";
   // lotmachine = new Lottery(lotteryPath, currentScene);
   // lotmachine.load();
 
-  // 여우
-  // const fox = new Fox(currentScene);
-
-  // 빛 추가!
-  // currentScene.add(ambientLight, hemiLight);
   bulb = bulbLight;
   currentScene.add(
     dirLight,
