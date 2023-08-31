@@ -12,8 +12,8 @@ const camera = new THREE.OrthographicCamera(
   width / 2,
   height / 2,
   height / -2,
-  -100,
-  200 // 카메라 거리
+  -200,
+  500 // 카메라 거리
 );
 camera.position.set(0, 5, 10);
 // camera.lookAt(0, 0, 0);
