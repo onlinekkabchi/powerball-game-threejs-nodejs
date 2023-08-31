@@ -7,17 +7,17 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 // import { camera, orbitController } from "./camera/camera.js";
 // import { orbitController } from "./camera/camera.js";
 // // import { renderer } from "./camera/renderer.js";
-// import {
-//   ambientLight,
-//   dirLight,
-//   hemiLight,
-//   dirLightHelper,
-//   hemiLightHelper,
-// } from "./light/light.js";
+import {
+  ambientLight,
+  dirLight,
+  hemiLight,
+  dirLightHelper,
+  hemiLightHelper,
+} from "./light/light.js";
 
-// import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
-// import { pointLight, pointLightHelper } from "./light/light-point.js";
-// import { bulbLight } from "./light/light-bulb.js";
+import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
+import { pointLight, pointLightHelper } from "./light/light-point.js";
+import { bulbLight } from "./light/light-bulb.js";
 
 // // 모델
 // import { cube1, cube2 } from "./models/cube.js";
@@ -68,25 +68,20 @@ function init() {
   controls.minDistance = 20;
   controls.maxDistance = 50;
   controls.maxPolarAngle = Math.PI / 2;
-  scene.add(new THREE.AmbientLight(0x666666));
-  const light = new THREE.PointLight(0xffffff, 3, 0, 0);
 
-  // 라이트 추가
-  camera.add(light);
+  scene.add(ambientLight, dirLight, dirLightHelper, hemiLight, hemiLightHelper);
+  // const light = new THREE.PointLight(0xffffff, 1000, 0, 0);
 
   scene.add(new THREE.AxesHelper(20));
-
   const meshMaterial = new THREE.MeshLambertMaterial({
     color: 0xffffff,
     opacity: 0.5,
     side: THREE.DoubleSide,
     transparent: true,
   });
-
   const meshGeometry = new THREE.BoxGeometry(100, 100, 100);
-
   mesh = new THREE.Mesh(meshGeometry, meshMaterial);
-
+  mesh.position.set(0, 80, 0);
   scene.add(mesh);
 
   // window.addEventListener( 'resize', onWindowResize );
