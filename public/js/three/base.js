@@ -1,161 +1,129 @@
 ﻿import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 // threejs 인스턴스
 // import { gridHelper, axesHelper } from "./helper/helper.js";
-import { camera, orbitController } from "./camera/camera.js";
-import { renderer } from "./camera/renderer.js";
-import {
-  ambientLight,
-  dirLight,
-  hemiLight,
-  dirLightHelper,
-  hemiLightHelper,
-} from "./light/light.js";
+// import { camera, orbitController } from "./camera/camera.js";
+// import { orbitController } from "./camera/camera.js";
+// // import { renderer } from "./camera/renderer.js";
+// import {
+//   ambientLight,
+//   dirLight,
+//   hemiLight,
+//   dirLightHelper,
+//   hemiLightHelper,
+// } from "./light/light.js";
 
-import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
-import { pointLight, pointLightHelper } from "./light/light-point.js";
-import { bulbLight } from "./light/light-bulb.js";
+// import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
+// import { pointLight, pointLightHelper } from "./light/light-point.js";
+// import { bulbLight } from "./light/light-bulb.js";
 
-// 모델
-import { cube1, cube2, stageFlag } from "./models/cube.js";
-import { stage, stageBaked } from "./models/stage.js";
-import egg from "./models/egg.js";
-import Lottery from "./models/lottery-machine-class.js";
-import { lottery } from "./models/lottery-machine.js";
-// import { Lottery, objLottery } from "./models/lottery-machine.js";
-// import fox from "./fox.js";
-import { Fox } from "./models/fox.js";
-import { sphere, sphere1 } from "./models/sphere.js";
+// // 모델
+// import { cube1, cube2 } from "./models/cube.js";
+// import { stage, stageBaked } from "./models/stage.js";
+// import Lottery from "./models/lottery-machine-class.js";
+// import { Fox } from "./models/fox.js";
+// import { sphere, sphere1 } from "./models/sphere.js";
 
-// 텍스쳐
-import { hdrLoader } from "./camera/hdr.js";
+// // 텍스쳐
+// import { hdrLoader } from "./camera/hdr.js";
 
-// 원운동
-const radius = 100;
-const angularSpeed = 2;
-
-const clock = new THREE.Clock();
-let currentCamera, currentScene, currentRenderer;
-let mixer;
-let balls;
 const loader = new GLTFLoader();
 
+let mesh;
+let group, camera, scene, renderer;
+
+init();
+
 function init() {
-  // 씬 세팅
-  currentScene = new THREE.Scene();
-  currentScene.background = new THREE.Color(0x1a1a1a);
-  // currentScene.background = hdrLoader; // 백그라운드 hdr 넣을지 안넣을지? post-processing때 처리할것.
+  scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x1a1a1a);
+  console.log("scene");
 
-  // helper 세팅
-  // scene.add(gridHelper, axesHelper);
+  // camera = new THREE.PerspectiveCamera(
+  //   40,
+  //   window.innerWidth / window.innerHeight,
+  //   1,
+  //   100
+  // );
+  // camera.position.set(5, 2, 8);
 
-  // 카메라, 랜더러 추가
-  currentCamera = camera;
-  currentRenderer = renderer;
-  orbitController(currentCamera, currentRenderer);
+  camera = new THREE.OrthographicCamera(
+    window.innerWidth / -2,
+    window.innerWidth / 2,
+    window.innerHeight / 2,
+    window.innerHeight / -2,
+    -200,
+    500 // 카메라 거리
+  );
+  camera.position.set(0, 1, 10);
 
-  // 캔버스 추가
+  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  // 큐브 추가
-  currentScene.add(cube1, cube2);
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.minDistance = 20;
+  controls.maxDistance = 50;
+  controls.maxPolarAngle = Math.PI / 2;
+  scene.add(new THREE.AmbientLight(0x666666));
+  const light = new THREE.PointLight(0xffffff, 3, 0, 0);
 
-  // 무대 원본, 베이킹본
-  // stage(currentScene);
-  stageBaked(currentScene);
+  // 라이트 추가
+  camera.add(light);
 
-  // 구
-  currentScene.add(sphere, sphere1);
+  scene.add(new THREE.AxesHelper(20));
 
-  // 로터리 머신 클래스
-  // const lotteryPath = "./static/model/lottery-machine/lottery-machine2.glb";
-
-  // lotmachine = new Lottery(lotteryPath, currentScene);
-  // lotmachine.load();
-
-  // 볼 시뮬레이션
-  const ballCollisionPath =
-    "./static/model/lottery-machine/ball-collision-2-1.glb";
-  loader.load(ballCollisionPath, function (gltf) {
-    balls = gltf.scene;
-
-    console.log("balls");
-    console.log(balls);
-
-    balls.position.set(-40, 40, 0);
-    balls.scale.set(10, 10, 10);
-    currentScene.add(balls);
-
-    balls.traverse(function (obj) {
-      if (obj.isMesh) obj.castShadow = true;
-    });
+  const meshMaterial = new THREE.MeshLambertMaterial({
+    color: 0xffffff,
+    opacity: 0.5,
+    side: THREE.DoubleSide,
+    transparent: true,
   });
 
-  // 빛 추가
-  currentScene.add(
-    dirLight,
-    hemiLight,
-    ambientLight,
-    dirLightHelper,
-    hemiLightHelper
-  );
-  currentScene.add(bulbLight);
-  // currentScene.add(pointLight, pointLightHelper);
-  // currentScene.add(rectLight1, rectLight2, rectLight3);
+  const meshGeometry = new THREE.BoxGeometry(100, 100, 100);
 
-  // 애니메이션
-  // 폭죽 샘플
-  const fireworkPath = "./static/model/firework/scene.gltf";
+  mesh = new THREE.Mesh(meshGeometry, meshMaterial);
+
+  scene.add(mesh);
+
+  // window.addEventListener( 'resize', onWindowResize );
+
+  // 무대 베이킹본
   loader.load(
-    fireworkPath,
+    "./static/model/stage-baked/scene.gltf",
     function (gltf) {
-      const firework = gltf.scene;
+      const model = gltf.scene;
 
-      console.log("firework");
-      console.log(gltf);
+      console.log(model);
 
-      firework.position.set(-40, 120, 0);
-      firework.scale.set(10, 10, 10);
-      currentScene.add(firework);
-
-      // console.log(gltf.animations[0]);
-      // mixer = new THREE.AnimationMixer(firework);
-      // mixer.clipAction(firework.animations[0]).play();
-
-      animate();
+      model.position.set(0, 0, 0);
+      model.scale.set(20, 20, 20); // orthographic 카메라 사용할때 크기 주의할것
+      scene.add(model);
     },
-    undefined,
-    function (e) {
-      console.error(e);
+    function (xhr) {
+      console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    },
+    function (err) {
+      console.error(err);
     }
   );
-}
 
-// 랜더링 함수
-function render() {
-  cube1.rotation.x += 0.05;
-  cube1.rotation.y += 0.05;
-  cube2.rotation.x += 0.03;
-  cube2.rotation.y += 0.03;
-  // stageFlag.rotation.y += 0.05;
+  animate();
 
-  // 전구 원운동
-  const time = performance.now() * 0.001; // Convert to seconds
-  const bulbX = radius * Math.cos(angularSpeed * time);
-  const bulbZ = radius * Math.sin(angularSpeed * time);
-  bulbLight.position.set(bulbX, 1, bulbZ);
-
-  // 파이널 랜더링
-  renderer.render(currentScene, currentCamera);
+  // render();
 }
 
 function animate() {
   requestAnimationFrame(animate);
-  const delta = clock.getDelta();
-  // mixer.update(delta);
+
+  mesh.rotation.y += 0.005;
 
   render();
 }
 
-init();
+function render() {
+  renderer.render(scene, camera);
+}
