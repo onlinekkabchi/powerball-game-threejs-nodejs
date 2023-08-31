@@ -36,19 +36,19 @@ const params = {
 };
 
 // 전구
-const bulbLight = new THREE.PointLight(color, 1, 100, 2);
+const bulbLight = new THREE.PointLight(color, 10, 2000, 100);
 const bulbGeometry = new THREE.SphereGeometry(2, 36, 16);
 const bulbMat = new THREE.MeshStandardMaterial({
-  // emissive: 0xffffee,
-  // emissiveIntensity: 1,
-  color: 0x000000,
+  emissive: 0xffffee,
+  emissiveIntensity: 1,
+  color: 0xffffff,
 });
 bulbLight.add(new THREE.Mesh(bulbGeometry, bulbMat));
-bulbLight.position.set(0, 230, 0);
+bulbLight.position.set(-20, 100, 0);
 bulbLight.castShadow = true;
 
 // bulbLight.power = bulbLuminousPowers["400 lm (40W)"];
-bulbLight.power = 400;
+bulbLight.power = 1200;
 // bulbMat.emissiveIntensity = bulbLight.intensity / Math.pow(0.02, 2.0);
 bulbMat.emissiveIntensity = bulbLight.intensity / Math.pow(0.02, 2.0);
 

@@ -29,7 +29,7 @@ const ambientLight = new THREE.AmbientLight(light.ambient);
 // 전체 광
 const dirLight = new THREE.DirectionalLight(light.directional);
 dirLight.position.set(0, 200, 0);
-dirLight.intensity = 1;
+dirLight.intensity = 10;
 
 const dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 10);
 
