@@ -5,7 +5,7 @@ const light = {
   ambient: 0x404040,
   directional: 0xffffff, // 0xd5deff
   bulb: 0xec9006,
-  hemiSky: 0xffffff,
+  hemiSky: 0xffef00,
   heimGround: 0xc9f6ff,
 };
 
@@ -31,7 +31,7 @@ const dirLight = new THREE.DirectionalLight(light.directional);
 dirLight.position.set(0, 200, 0);
 dirLight.intensity = 1;
 
-const dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 3);
+const dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 10);
 
 // 반사광
 const hemiLight = new THREE.HemisphereLight(light.hemiSky, light.heimGround, 1);
@@ -40,6 +40,6 @@ hemiLight.scale.set(10, 10, 10);
 // hemiLight.intensity = hemiLuminousIrradiances["living room"];
 hemiLight.intensity = 10;
 
-const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 5);
+const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 100);
 
 export { ambientLight, dirLight, hemiLight, dirLightHelper, hemiLightHelper };

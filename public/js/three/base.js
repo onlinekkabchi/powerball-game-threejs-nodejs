@@ -31,8 +31,8 @@ import { sphere, sphere1 } from "./models/sphere.js";
 import { hdrLoader } from "./camera/hdr.js";
 
 // 원운동
-const radius = 5;
-const angularSpeed = 1;
+const radius = 100;
+const angularSpeed = 2;
 
 let currentCamera, currentScene, currentRenderer;
 let lotmachine;
@@ -71,22 +71,22 @@ function init() {
   // lotmachine = new Lottery(lotteryPath, currentScene);
   // lotmachine.load();
 
-  bulb = bulbLight;
   currentScene.add(
     dirLight,
     hemiLight,
     ambientLight,
-    dirLightHelper
-    // hemiLightHelper
+    dirLightHelper,
+    hemiLightHelper
   );
-  currentScene.add(bulb);
-  currentScene.add(pointLight, pointLightHelper);
-  currentScene.add(rectLight1, rectLight2, rectLight3);
+  currentScene.add(bulbLight);
+  // currentScene.add(pointLight, pointLightHelper);
+  // currentScene.add(rectLight1, rectLight2, rectLight3);
 }
 
 // 랜더링 함수
 function render() {
-  cube1.rotation.y += 0.03;
+  cube1.rotation.x += 0.05;
+  cube1.rotation.y += 0.05;
   cube2.rotation.x += 0.03;
   cube2.rotation.y += 0.03;
   // stageFlag.rotation.y += 0.05;
@@ -95,7 +95,7 @@ function render() {
   const time = performance.now() * 0.001; // Convert to seconds
   const bulbX = radius * Math.cos(angularSpeed * time);
   const bulbZ = radius * Math.sin(angularSpeed * time);
-  bulb.position.set(bulbX, 1, bulbZ);
+  bulbLight.position.set(bulbX, 1, bulbZ);
 
   // 파이널 랜더링
   renderer.render(currentScene, currentCamera);

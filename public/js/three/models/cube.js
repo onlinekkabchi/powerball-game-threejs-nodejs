@@ -4,9 +4,9 @@ const geometry = new THREE.BoxGeometry(1, 1, 1);
 
 // const material1 = new THREE.MeshBasicMaterial({ color: 0xffffff });
 const material1 = new THREE.MeshStandardMaterial({
-  emissive: 0xffffee,
+  emissive: 0xff0000,
   emissiveIntensity: 1,
-  color: 0xffffff,
+  color: 0xff0000,
 });
 // const material2 = new THREE.MeshBasicMaterial({ color: 0x00ffff });
 const material2 = new THREE.MeshPhysicalMaterial({
