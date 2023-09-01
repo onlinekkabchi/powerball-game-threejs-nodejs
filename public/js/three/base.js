@@ -246,9 +246,9 @@ function init() {
       console.log("firework");
       console.log(gltf);
       firework.position.set(0, 80, 0);
-      firework.scale.set(5, 5, 5);
+      firework.scale.set(8, 8, 8);
 
-      // scene.add(firework);
+      scene.add(firework);
 
       // 폭죽 애니메이션
       const fireAnimations = gltf.animations;
