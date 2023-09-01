@@ -30,14 +30,14 @@ const light = {
 //   "direct sun": 50000,
 // };
 
-const ambientLight = new THREE.AmbientLight(light.lime);
+const ambientLight = new THREE.AmbientLight(light.helio);
 ambientLight.position.set(0, 100, 0);
-ambientLight.intensity = 5;
+ambientLight.intensity = 0.03;
 
 // 전체 광
 const dirLight = new THREE.DirectionalLight(light.yellow1);
 dirLight.position.set(0, 150, 0);
-dirLight.intensity = 0.3;
+dirLight.intensity = 0.03;
 
 const dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 10);
 
@@ -46,8 +46,8 @@ const hemiLight = new THREE.HemisphereLight(light.mulberry, light.helio, 1);
 hemiLight.position.set(0, 50, 0);
 hemiLight.scale.set(10, 20, 10);
 // hemiLight.intensity = hemiLuminousIrradiances["living room"];
-hemiLight.intensity = 5;
+hemiLight.intensity = 0.3;
 
-const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 5);
+const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 3);
 
 export { ambientLight, dirLight, hemiLight, dirLightHelper, hemiLightHelper };

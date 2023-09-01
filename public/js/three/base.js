@@ -14,6 +14,7 @@ import {
   dirLightHelper,
   hemiLightHelper,
 } from "./light/light.js";
+import { pointLight, pointLightHelper } from "./light/light-point.js";
 
 // import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
 // import { pointLight, pointLightHelper } from "./light/light-point.js";
@@ -34,7 +35,7 @@ const clock = new THREE.Clock();
 
 let mesh;
 let firework, fireworkAction, lottery, lotteryAction, ring, ringAction;
-let mixer;
+let fireworkMixer, ringMixer;
 let group, camera, scene, renderer;
 
 init();
@@ -75,16 +76,20 @@ function init() {
   controls.maxPolarAngle = Math.PI / 2;
 
   scene.add(ambientLight, dirLight, dirLightHelper, hemiLight, hemiLightHelper);
+  scene.add(pointLight, pointLightHelper);
   // const light = new THREE.PointLight(0xffffff, 1000, 0, 0);
 
   scene.add(new THREE.AxesHelper(20));
+
+  // const meshGeometry = new THREE.BoxGeometry(20, 20, 20);
+  const meshGeometry = new THREE.SphereGeometry(48, 32, 16);
   const meshMaterial = new THREE.MeshLambertMaterial({
     color: 0xffffff,
     opacity: 0.5,
     side: THREE.DoubleSide,
     transparent: true,
   });
-  const meshGeometry = new THREE.BoxGeometry(20, 20, 20);
+
   mesh = new THREE.Mesh(meshGeometry, meshMaterial);
   mesh.position.set(0, 80, 0);
   scene.add(mesh);
@@ -108,7 +113,7 @@ function init() {
     }
   );
 
-  const lotteryPath = "./static/model/lottery-machine/lottery-machine1.glb";
+  const lotteryPath = "./static/model/lottery-machine/ball-collision-2-1.glb";
   loader.load(lotteryPath, function (gltf) {
     lottery = gltf.scene;
 
@@ -121,7 +126,7 @@ function init() {
     // scene.add(lottery);
   });
 
-  // 받침대
+  // ring animation
   const ringPath = "./static/model/magic_ring_green/scene.gltf";
   loader.load(ringPath, function (gltf) {
     ring = gltf.scene;
@@ -133,17 +138,16 @@ function init() {
 
     scene.add(ring);
 
-    // 폭죽 애니메이션
     const animations = gltf.animations;
-    mixer = new THREE.AnimationMixer(ring);
+    ringMixer = new THREE.AnimationMixer(ring);
     // fireworkAction = mixer.clipAction(animations[0]);
-    mixer.clipAction(animations[0]).play();
-    console.log(mixer.clipAction(animations[0]));
+    ringMixer.clipAction(animations[0]).play();
+    // console.log(ringMixer.clipAction(animations[0]));
 
     animate();
   });
 
-  // 폭죽
+  // firework animation
   const fireworkPath = "./static/model/firework/scene.gltf";
   loader.load(
     fireworkPath,
@@ -158,10 +162,10 @@ function init() {
       scene.add(firework);
 
       // 폭죽 애니메이션
-      // const animations = gltf.animations;
-      // mixer = new THREE.AnimationMixer(firework);
-      // mixer.clipAction(animations[0]).play();
-      // console.log(mixer.clipAction(animations[0]));
+      const animations = gltf.animations;
+      fireworkMixer = new THREE.AnimationMixer(firework);
+      fireworkMixer.clipAction(animations[0]).play();
+      console.log(fireworkMixer.clipAction(animations[0]));
 
       // animate();
     },
@@ -187,7 +191,13 @@ function animate() {
   // console.log(mixerUpdateDelta);
   // console.log(mixer);
 
-  mixer.update(mixerUpdateDelta);
+  if (fireworkMixer) {
+    fireworkMixer.update(mixerUpdateDelta);
+  }
+
+  if (ringMixer) {
+    ringMixer.update(mixerUpdateDelta);
+  }
 
   render();
 }
