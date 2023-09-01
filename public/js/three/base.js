@@ -33,8 +33,7 @@ const loader = new GLTFLoader();
 const clock = new THREE.Clock();
 
 let mesh;
-let firework;
-let fireworkAction;
+let firework, fireworkAction, lottery, lotteryAction, ring, ringAction;
 let mixer;
 let group, camera, scene, renderer;
 
@@ -56,16 +55,17 @@ function init() {
   camera = new THREE.OrthographicCamera(
     window.innerWidth / -2,
     window.innerWidth / 2,
-    (window.innerHeight * 0.5) / 2,
-    (window.innerHeight * 0.5) / -2,
+    (window.innerHeight * 0.7) / 2,
+    (window.innerHeight * 0.7) / -2,
     -200,
     500 // 카메라 거리
   );
-  camera.position.set(0, 1, 10);
+  camera.position.set(0, 3, 10);
+  // camera.lookAt(0, 10, 0);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight / 2); // 캔버스 사이즈
+  renderer.setSize(window.innerWidth, window.innerHeight * 0.7); // 캔버스 사이즈
   document.body.appendChild(renderer.domElement);
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -108,6 +108,42 @@ function init() {
     }
   );
 
+  const lotteryPath = "./static/model/lottery-machine/lottery-machine1.glb";
+  loader.load(lotteryPath, function (gltf) {
+    lottery = gltf.scene;
+
+    console.log("lottery machine");
+    console.log(gltf);
+
+    lottery.position.set(0, -135, 0);
+    lottery.scale.set(500, 500, 500);
+
+    // scene.add(lottery);
+  });
+
+  // 받침대
+  const ringPath = "./static/model/magic_ring_green/scene.gltf";
+  loader.load(ringPath, function (gltf) {
+    ring = gltf.scene;
+
+    console.log("firework");
+    console.log(gltf);
+    ring.position.set(0, 10, 0);
+    ring.scale.set(20, 20, 20);
+
+    scene.add(ring);
+
+    // 폭죽 애니메이션
+    const animations = gltf.animations;
+    mixer = new THREE.AnimationMixer(ring);
+    // fireworkAction = mixer.clipAction(animations[0]);
+    mixer.clipAction(animations[0]).play();
+    console.log(mixer.clipAction(animations[0]));
+
+    animate();
+  });
+
+  // 폭죽
   const fireworkPath = "./static/model/firework/scene.gltf";
   loader.load(
     fireworkPath,
@@ -116,20 +152,18 @@ function init() {
 
       console.log("firework");
       console.log(gltf);
-      firework.position.set(0, 20, 0);
+      firework.position.set(0, 50, 0);
       firework.scale.set(5, 5, 5);
 
       scene.add(firework);
 
       // 폭죽 애니메이션
+      // const animations = gltf.animations;
+      // mixer = new THREE.AnimationMixer(firework);
+      // mixer.clipAction(animations[0]).play();
+      // console.log(mixer.clipAction(animations[0]));
 
-      const animations = gltf.animations;
-      mixer = new THREE.AnimationMixer(firework);
-      // fireworkAction = mixer.clipAction(animations[0]);
-      mixer.clipAction(animations[0]).play();
-      console.log(mixer.clipAction(animations[0]));
-
-      animate();
+      // animate();
     },
     undefined,
     function (err) {
@@ -145,7 +179,8 @@ function init() {
 function animate() {
   requestAnimationFrame(animate);
 
-  mesh.rotation.y += 0.005;
+  // mesh.rotation.x += 0.05;
+  mesh.rotation.y += 0.05;
 
   let mixerUpdateDelta = clock.getDelta();
 

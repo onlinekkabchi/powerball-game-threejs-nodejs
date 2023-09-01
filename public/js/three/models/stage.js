@@ -69,9 +69,9 @@ function stageBaked(scene) {
     function (gltf) {
       const model = gltf.scene;
 
-      console.log(model);
+      // console.log(model);
 
-      model.position.set(0, 0, 0);
+      model.position.set(0, -1000, 0);
       model.scale.set(20, 20, 20);
       scene.add(model);
     },
