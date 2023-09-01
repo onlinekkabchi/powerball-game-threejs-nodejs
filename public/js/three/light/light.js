@@ -32,7 +32,7 @@ const light = {
 
 const ambientLight = new THREE.AmbientLight(light.helio);
 ambientLight.position.set(0, 100, 0);
-ambientLight.intensity = 0.03;
+ambientLight.intensity = 0.3;
 
 // 전체 광
 const dirLight = new THREE.DirectionalLight(light.yellow1);
@@ -46,7 +46,7 @@ const hemiLight = new THREE.HemisphereLight(light.mulberry, light.helio, 1);
 hemiLight.position.set(0, 50, 0);
 hemiLight.scale.set(10, 20, 10);
 // hemiLight.intensity = hemiLuminousIrradiances["living room"];
-hemiLight.intensity = 0.3;
+hemiLight.intensity = 1;
 
 const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 3);
 

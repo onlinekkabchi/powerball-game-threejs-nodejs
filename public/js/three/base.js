@@ -28,14 +28,16 @@ import { pointLight, pointLightHelper } from "./light/light-point.js";
 // import { sphere, sphere1 } from "./models/sphere.js";
 
 // // 텍스쳐
-// import { hdrLoader } from "./camera/hdr.js";
+import { hdrLoader } from "./camera/hdr.js";
 
 const loader = new GLTFLoader();
 const clock = new THREE.Clock();
 
+let animationStartTime = null;
+
 let mesh;
 let firework, fireworkAction, lottery, lotteryAction, ring, ringAction;
-let fireworkMixer, ringMixer;
+let fireworkMixer, ringMixer, lotteryMixer;
 let group, camera, scene, renderer;
 
 init();
@@ -82,16 +84,16 @@ function init() {
   scene.add(new THREE.AxesHelper(20));
 
   // const meshGeometry = new THREE.BoxGeometry(20, 20, 20);
-  const meshGeometry = new THREE.SphereGeometry(48, 32, 16);
+  const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
   const meshMaterial = new THREE.MeshLambertMaterial({
     color: 0xffffff,
-    opacity: 0.5,
+    opacity: 1,
     side: THREE.DoubleSide,
     transparent: true,
   });
 
   mesh = new THREE.Mesh(meshGeometry, meshMaterial);
-  mesh.position.set(0, 80, 0);
+  mesh.position.set(0, 200, 0);
   scene.add(mesh);
 
   // window.addEventListener( 'resize', onWindowResize );
@@ -113,17 +115,43 @@ function init() {
     }
   );
 
+  // 로터리 머신
   const lotteryPath = "./static/model/lottery-machine/ball-collision-2-1.glb";
+  const lotteryMat1 = new THREE.MeshPhysicalMaterial({
+    metalness: 0.9,
+    roughness: 0,
+    clearcoat: 1,
+    transparent: true,
+    opacity: 0.5,
+    reflectivity: 0.2,
+    refractionRatio: 0.9,
+    ior: 0.9,
+    side: THREE.BackSide,
+    envMap: hdrLoader,
+    envMapIntensity: 1,
+    // emissive: 0xffffff,
+    // emissiveIntensity: 1,
+  });
+  const lotteryMat2 = new THREE.MeshBasicMaterial({
+    transparent: true,
+    opacity: 0,
+  });
   loader.load(lotteryPath, function (gltf) {
     lottery = gltf.scene;
 
     console.log("lottery machine");
     console.log(gltf);
 
-    lottery.position.set(0, -135, 0);
-    lottery.scale.set(500, 500, 500);
+    // lottery.children.forEach((el) => {
+    //   el.material = lotteryMat1;
+    // });
+    lottery.children[3].material = lotteryMat1;
+    lottery.children[2].material = lotteryMat2;
 
-    // scene.add(lottery);
+    lottery.position.set(0, 100, 0);
+    lottery.scale.set(20, 20, 20);
+
+    scene.add(lottery);
   });
 
   // ring animation
@@ -134,15 +162,24 @@ function init() {
     console.log("firework");
     console.log(gltf);
     ring.position.set(0, 10, 0);
-    ring.scale.set(20, 20, 20);
+    ring.scale.set(15, 15, 15);
 
     scene.add(ring);
 
     const animations = gltf.animations;
     ringMixer = new THREE.AnimationMixer(ring);
-    // fireworkAction = mixer.clipAction(animations[0]);
-    ringMixer.clipAction(animations[0]).play();
+    ringAction = ringMixer.clipAction(animations[0]);
     // console.log(ringMixer.clipAction(animations[0]));
+
+    // // Start the animation after 5 seconds
+    setTimeout(() => {
+      ringMixer.clipAction(animations[0]).play();
+    }, 5000);
+
+    // // Stop the animation after 15 seconds
+    // setTimeout(() => {
+    //   ringMixer.clipAction(animations[0]).stop();
+    // }, 15000);
 
     animate();
   });
@@ -156,7 +193,7 @@ function init() {
 
       console.log("firework");
       console.log(gltf);
-      firework.position.set(0, 50, 0);
+      firework.position.set(0, 80, 0);
       firework.scale.set(5, 5, 5);
 
       scene.add(firework);
@@ -197,6 +234,7 @@ function animate() {
 
   if (ringMixer) {
     ringMixer.update(mixerUpdateDelta);
+    // ringAction.play();
   }
 
   render();
