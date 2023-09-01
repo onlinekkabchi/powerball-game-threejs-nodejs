@@ -15,9 +15,9 @@ import {
   hemiLightHelper,
 } from "./light/light.js";
 
-import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
-import { pointLight, pointLightHelper } from "./light/light-point.js";
-import { bulbLight } from "./light/light-bulb.js";
+// import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
+// import { pointLight, pointLightHelper } from "./light/light-point.js";
+// import { bulbLight } from "./light/light-bulb.js";
 
 // // 모델
 // import { cube1, cube2 } from "./models/cube.js";
@@ -30,8 +30,12 @@ import { bulbLight } from "./light/light-bulb.js";
 // import { hdrLoader } from "./camera/hdr.js";
 
 const loader = new GLTFLoader();
+const clock = new THREE.Clock();
 
 let mesh;
+let firework;
+let fireworkAction;
+let mixer;
 let group, camera, scene, renderer;
 
 init();
@@ -52,8 +56,8 @@ function init() {
   camera = new THREE.OrthographicCamera(
     window.innerWidth / -2,
     window.innerWidth / 2,
-    window.innerHeight / 2,
-    window.innerHeight / -2,
+    (window.innerHeight * 0.5) / 2,
+    (window.innerHeight * 0.5) / -2,
     -200,
     500 // 카메라 거리
   );
@@ -61,10 +65,11 @@ function init() {
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize(window.innerWidth, window.innerHeight / 2); // 캔버스 사이즈
   document.body.appendChild(renderer.domElement);
 
   const controls = new OrbitControls(camera, renderer.domElement);
+  controls.target.set(0, 0, 0);
   controls.minDistance = 20;
   controls.maxDistance = 50;
   controls.maxPolarAngle = Math.PI / 2;
@@ -79,7 +84,7 @@ function init() {
     side: THREE.DoubleSide,
     transparent: true,
   });
-  const meshGeometry = new THREE.BoxGeometry(100, 100, 100);
+  const meshGeometry = new THREE.BoxGeometry(20, 20, 20);
   mesh = new THREE.Mesh(meshGeometry, meshMaterial);
   mesh.position.set(0, 80, 0);
   scene.add(mesh);
@@ -91,9 +96,6 @@ function init() {
     "./static/model/stage-baked/scene.gltf",
     function (gltf) {
       const model = gltf.scene;
-
-      console.log(model);
-
       model.position.set(0, 0, 0);
       model.scale.set(20, 20, 20); // orthographic 카메라 사용할때 크기 주의할것
       scene.add(model);
@@ -106,7 +108,36 @@ function init() {
     }
   );
 
-  animate();
+  const fireworkPath = "./static/model/firework/scene.gltf";
+  loader.load(
+    fireworkPath,
+    function (gltf) {
+      firework = gltf.scene;
+
+      console.log("firework");
+      console.log(gltf);
+      firework.position.set(0, 20, 0);
+      firework.scale.set(5, 5, 5);
+
+      scene.add(firework);
+
+      // 폭죽 애니메이션
+
+      const animations = gltf.animations;
+      mixer = new THREE.AnimationMixer(firework);
+      // fireworkAction = mixer.clipAction(animations[0]);
+      mixer.clipAction(animations[0]).play();
+      console.log(mixer.clipAction(animations[0]));
+
+      animate();
+    },
+    undefined,
+    function (err) {
+      console.error(err);
+    }
+  );
+
+  // animate();
 
   // render();
 }
@@ -115,6 +146,13 @@ function animate() {
   requestAnimationFrame(animate);
 
   mesh.rotation.y += 0.005;
+
+  let mixerUpdateDelta = clock.getDelta();
+
+  // console.log(mixerUpdateDelta);
+  // console.log(mixer);
+
+  mixer.update(mixerUpdateDelta);
 
   render();
 }
