@@ -14,7 +14,12 @@ import {
   dirLightHelper,
   hemiLightHelper,
 } from "./light/light.js";
-import { pointLight, pointLightHelper } from "./light/light-point.js";
+import {
+  pointLight,
+  pointLightHelper,
+  pointLight2,
+  pointLightHelper2,
+} from "./light/light-point.js";
 
 // import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
 // import { pointLight, pointLightHelper } from "./light/light-point.js";
@@ -27,6 +32,23 @@ import { pointLight, pointLightHelper } from "./light/light-point.js";
 // import { Fox } from "./models/fox.js";
 // import { sphere, sphere1 } from "./models/sphere.js";
 
+// 텍스트
+import {
+  text,
+  bevelEnabled,
+  font,
+  fontName,
+  fontWeight,
+  fontHeight,
+  fontSize,
+  fontHover,
+  fontCurveSegments,
+  fontBevelSize,
+  fontBevelThickness,
+  fontMirror,
+  fontMap,
+  weightMap,
+} from "./text/text.js";
 // // 텍스쳐
 import { hdrLoader } from "./camera/hdr.js";
 
@@ -40,7 +62,35 @@ let firework, fireworkAction, lottery, lotteryAction, ring, ringAction;
 let fireworkMixer, ringMixer, lotteryMixer;
 let group, camera, scene, renderer;
 
+let isRingAnimationPlaying = false;
+let animations;
+
+let ballController = {
+  moving: false,
+  limit: 100,
+};
+let lightIntensity = {
+  hemiLight: 1,
+  ambientLight: 1,
+};
+
 init();
+
+function createText() {
+  const textGeo = new TextGeometry(text, {
+    font: font,
+
+    size: fontSize,
+    height: fontHeight,
+    curveSegments: fontCurveSegments,
+
+    bevelThickness: fontBevelThickness,
+    bevelSize: fontBevelSize,
+    bevelEnabled: fontBevelEnabled,
+  });
+
+  textGeo.computeBoundingBox();
+}
 
 function init() {
   scene = new THREE.Scene();
@@ -77,14 +127,14 @@ function init() {
   controls.maxDistance = 50;
   controls.maxPolarAngle = Math.PI / 2;
 
-  scene.add(ambientLight, dirLight, dirLightHelper, hemiLight, hemiLightHelper);
-  scene.add(pointLight, pointLightHelper);
+  scene.add(ambientLight, dirLight, hemiLight, dirLightHelper, hemiLightHelper);
+  scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
   // const light = new THREE.PointLight(0xffffff, 1000, 0, 0);
 
   scene.add(new THREE.AxesHelper(20));
 
-  // const meshGeometry = new THREE.BoxGeometry(20, 20, 20);
-  const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
+  const meshGeometry = new THREE.BoxGeometry(10, 10, 10);
+  // const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
   const meshMaterial = new THREE.MeshLambertMaterial({
     color: 0xffffff,
     opacity: 1,
@@ -118,23 +168,33 @@ function init() {
   // 로터리 머신
   const lotteryPath = "./static/model/lottery-machine/ball-collision-2-1.glb";
   const lotteryMat1 = new THREE.MeshPhysicalMaterial({
-    metalness: 0.9,
+    color: 0xffffff,
+    metalness: 1,
     roughness: 0,
     clearcoat: 1,
     transparent: true,
-    opacity: 0.5,
-    reflectivity: 0.2,
+    opacity: 0.2,
+    reflectivity: 0.1,
     refractionRatio: 0.9,
     ior: 0.9,
     side: THREE.BackSide,
     envMap: hdrLoader,
     envMapIntensity: 1,
-    // emissive: 0xffffff,
-    // emissiveIntensity: 1,
+    emissive: 0xffffff,
+    emissiveIntensity: 0.1,
   });
   const lotteryMat2 = new THREE.MeshBasicMaterial({
     transparent: true,
     opacity: 0,
+  });
+  const ballGeometry = new THREE.SphereGeometry(10, 32, 32);
+  const ballMat = new THREE.MeshPhysicalMaterial({
+    color: 0xff7900,
+    metalness: 1,
+    roughness: 0,
+    clearcoat: 1,
+    envMap: hdrLoader,
+    envMapIntensity: 1,
   });
   loader.load(lotteryPath, function (gltf) {
     lottery = gltf.scene;
@@ -147,19 +207,21 @@ function init() {
     // });
     lottery.children[3].material = lotteryMat1;
     lottery.children[2].material = lotteryMat2;
+    lottery.children[1].mesh = ballGeometry;
+    lottery.children[1].material = ballMat;
 
-    lottery.position.set(0, 100, 0);
+    lottery.position.set(0, 70, 0);
     lottery.scale.set(20, 20, 20);
 
     scene.add(lottery);
   });
 
-  // ring animation
+  // 마법진?
   const ringPath = "./static/model/magic_ring_green/scene.gltf";
   loader.load(ringPath, function (gltf) {
     ring = gltf.scene;
 
-    console.log("firework");
+    console.log("ring");
     console.log(gltf);
     ring.position.set(0, 10, 0);
     ring.scale.set(15, 15, 15);
@@ -171,20 +233,10 @@ function init() {
     ringAction = ringMixer.clipAction(animations[0]);
     // console.log(ringMixer.clipAction(animations[0]));
 
-    // // Start the animation after 5 seconds
-    setTimeout(() => {
-      ringMixer.clipAction(animations[0]).play();
-    }, 5000);
-
-    // // Stop the animation after 15 seconds
-    // setTimeout(() => {
-    //   ringMixer.clipAction(animations[0]).stop();
-    // }, 15000);
-
     animate();
   });
 
-  // firework animation
+  // 폭죽
   const fireworkPath = "./static/model/firework/scene.gltf";
   loader.load(
     fireworkPath,
@@ -196,13 +248,13 @@ function init() {
       firework.position.set(0, 80, 0);
       firework.scale.set(5, 5, 5);
 
-      scene.add(firework);
+      // scene.add(firework);
 
       // 폭죽 애니메이션
-      const animations = gltf.animations;
+      const fireAnimations = gltf.animations;
       fireworkMixer = new THREE.AnimationMixer(firework);
-      fireworkMixer.clipAction(animations[0]).play();
-      console.log(fireworkMixer.clipAction(animations[0]));
+      fireworkMixer.clipAction(fireAnimations[0]).play();
+      console.log(fireworkMixer.clipAction(fireAnimations[0]));
 
       // animate();
     },
@@ -237,9 +289,36 @@ function animate() {
     // ringAction.play();
   }
 
+  if (isRingAnimationPlaying) {
+    ringAction.play();
+  }
+
+  if (ballController.moving && isRingAnimationPlaying) {
+    lottery.position.y += 0.2;
+    // dirLight.intensity += 0.01;
+    // ambientLight.intensity += 0.01;
+    // hemiLight.intensity += 0.02;
+    // console.log(lottery.position.y, ballController.limit);
+    console.log("ambientlight intensity: " + ambientLight.intensity);
+    console.log("hemilight intensity: " + hemiLight.intensity);
+    if (lottery.position.y > ballController.limit) {
+      ballController.moving = false;
+    }
+  }
+
   render();
 }
 
 function render() {
   renderer.render(scene, camera);
 }
+
+setTimeout(() => {
+  // if (ringAction) {
+  // ringMixer.update(mixerUpdateDelta);
+  // ringAction.play();
+  // }
+  console.log("ring animation playing..");
+  isRingAnimationPlaying = true;
+  ballController.moving = true;
+}, 3000);

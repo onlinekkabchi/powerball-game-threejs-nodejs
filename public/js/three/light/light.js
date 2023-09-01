@@ -5,6 +5,9 @@ const light = {
   ambient: 0x404040,
   directional: 0xffffff, // 0xd5deff
   bulb: 0xec9006,
+  lightSkyblue: 0xd8f9ff,
+  skyblue: 0xb1f2ff,
+  lightBlue: 0x63e5ff,
   veryLightYellow: 0xffffcc,
   lightYellow: 0xffff56,
   yellow1: 0xffe736,
@@ -30,14 +33,14 @@ const light = {
 //   "direct sun": 50000,
 // };
 
-const ambientLight = new THREE.AmbientLight(light.helio);
+const ambientLight = new THREE.AmbientLight(light.lightBlue);
 ambientLight.position.set(0, 100, 0);
-ambientLight.intensity = 0.3;
+ambientLight.intensity = 5;
 
 // 전체 광
-const dirLight = new THREE.DirectionalLight(light.yellow1);
-dirLight.position.set(0, 150, 0);
-dirLight.intensity = 0.03;
+const dirLight = new THREE.DirectionalLight(light.skyblue);
+dirLight.position.set(0, 250, 0);
+dirLight.intensity = 1;
 
 const dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 10);
 
