@@ -1,6 +1,7 @@
 ﻿import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 
 // threejs 인스턴스
 // import { gridHelper, axesHelper } from "./helper/helper.js";
@@ -32,23 +33,6 @@ import {
 // import { Fox } from "./models/fox.js";
 // import { sphere, sphere1 } from "./models/sphere.js";
 
-// 텍스트
-import {
-  text,
-  bevelEnabled,
-  font,
-  fontName,
-  fontWeight,
-  fontHeight,
-  fontSize,
-  fontHover,
-  fontCurveSegments,
-  fontBevelSize,
-  fontBevelThickness,
-  fontMirror,
-  fontMap,
-  weightMap,
-} from "./text/text.js";
 // // 텍스쳐
 import { hdrLoader } from "./camera/hdr.js";
 
@@ -58,8 +42,18 @@ const clock = new THREE.Clock();
 let animationStartTime = null;
 
 let mesh;
-let firework, fireworkAction, lottery, lotteryAction, ring, ringAction;
-let fireworkMixer, ringMixer, lotteryMixer;
+let firework,
+  fireworkAction,
+  lottery,
+  lotteryAction,
+  ring,
+  ringAction,
+  trupper,
+  trupperAction;
+let fireworkMixer, ringMixer, lotteryMixer, trupperMixer;
+let lotterySample, lotterySampleMixer;
+let lotterySampleAction = [];
+
 let group, camera, scene, renderer;
 
 let isRingAnimationPlaying = false;
@@ -67,7 +61,7 @@ let animations;
 
 let ballController = {
   moving: false,
-  limit: 100,
+  limit: 10,
 };
 let lightIntensity = {
   hemiLight: 1,
@@ -76,26 +70,11 @@ let lightIntensity = {
 
 init();
 
-function createText() {
-  const textGeo = new TextGeometry(text, {
-    font: font,
-
-    size: fontSize,
-    height: fontHeight,
-    curveSegments: fontCurveSegments,
-
-    bevelThickness: fontBevelThickness,
-    bevelSize: fontBevelSize,
-    bevelEnabled: fontBevelEnabled,
-  });
-
-  textGeo.computeBoundingBox();
-}
-
 function init() {
-  scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x1a1a1a);
   console.log("scene");
+
+  scene = new THREE.Scene();
+  // scene.background = new THREE.Color(0xebebeb);
 
   // camera = new THREE.PerspectiveCamera(
   //   40,
@@ -111,10 +90,10 @@ function init() {
     (window.innerHeight * 0.7) / 2,
     (window.innerHeight * 0.7) / -2,
     -200,
-    500 // 카메라 거리
+    250 // 카메라 거리
   );
-  camera.position.set(0, 3, 10);
-  // camera.lookAt(0, 10, 0);
+  camera.position.set(0, 12, 25);
+  camera.lookAt(0, 0, 0);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -126,14 +105,15 @@ function init() {
   controls.minDistance = 20;
   controls.maxDistance = 50;
   controls.maxPolarAngle = Math.PI / 2;
+  // controls.enableRotate = false;
 
   scene.add(ambientLight, dirLight, hemiLight, dirLightHelper, hemiLightHelper);
-  scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
+  // scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
   // const light = new THREE.PointLight(0xffffff, 1000, 0, 0);
 
   scene.add(new THREE.AxesHelper(20));
 
-  const meshGeometry = new THREE.BoxGeometry(10, 10, 10);
+  const meshGeometry = new THREE.BoxGeometry(200, 250, 100);
   // const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
   const meshMaterial = new THREE.MeshLambertMaterial({
     color: 0xffffff,
@@ -143,18 +123,33 @@ function init() {
   });
 
   mesh = new THREE.Mesh(meshGeometry, meshMaterial);
-  mesh.position.set(0, 200, 0);
+  mesh.position.set(0, 0, -130);
   scene.add(mesh);
 
   // window.addEventListener( 'resize', onWindowResize );
+
+  // 전체 배경
+  // const hdrPath = "../../../static/texture/MR_INT-005_WhiteNeons_NAD.hdr";
+  // const hdrPath = "../../../static/texture/MR_INT-001_NaturalStudio_NAD.hdr";
+  // const hdrPath = "../../../static/texture/Window_Lighting_01.jpeg";
+  const hdrPath = "../../../static/background/space-1.hdr";
+  // const hdrPath = "../../../static/background/glitter-3.hdr";
+
+  new RGBELoader().load(hdrPath, function (texture) {
+    // console.log("hdrtexture!!");
+    // texture.mapping = THREE.EquirectangularReflectionMapping;
+
+    scene.background = texture;
+    scene.environment = texture;
+  });
 
   // 무대 베이킹본
   loader.load(
     "./static/model/stage-baked/scene.gltf",
     function (gltf) {
       const model = gltf.scene;
-      model.position.set(0, 0, 0);
-      model.scale.set(20, 20, 20); // orthographic 카메라 사용할때 크기 주의할것
+      model.position.set(0, -130, 20);
+      model.scale.set(25, 25, 25); // orthographic 카메라 사용할때 크기 주의할것
       scene.add(model);
     },
     function (xhr) {
@@ -173,15 +168,15 @@ function init() {
     roughness: 0,
     clearcoat: 1,
     transparent: true,
-    opacity: 0.2,
+    opacity: 0.5,
     reflectivity: 0.1,
     refractionRatio: 0.9,
-    ior: 0.9,
+    ior: 1,
     side: THREE.BackSide,
     envMap: hdrLoader,
     envMapIntensity: 1,
-    emissive: 0xffffff,
-    emissiveIntensity: 0.1,
+    // emissive: 0xffffff,
+    // emissiveIntensity: 0.1,
   });
   const lotteryMat2 = new THREE.MeshBasicMaterial({
     transparent: true,
@@ -190,11 +185,11 @@ function init() {
   const ballGeometry = new THREE.SphereGeometry(10, 32, 32);
   const ballMat = new THREE.MeshPhysicalMaterial({
     color: 0xff7900,
-    metalness: 1,
+    metalness: 0.9,
     roughness: 0,
     clearcoat: 1,
-    envMap: hdrLoader,
-    envMapIntensity: 1,
+    // emissive: 0xffffff,
+    // emissiveIntensity: 1,
   });
   loader.load(lotteryPath, function (gltf) {
     lottery = gltf.scene;
@@ -210,10 +205,39 @@ function init() {
     lottery.children[1].mesh = ballGeometry;
     lottery.children[1].material = ballMat;
 
-    lottery.position.set(0, 70, 0);
+    lottery.position.set(0, -30, 0);
     lottery.scale.set(20, 20, 20);
 
     scene.add(lottery);
+  });
+
+  // 샘플 로터리 머신
+  const lotterySamplePath =
+    "./static/model/lottery-machine/lottery-machine2.glb";
+  loader.load(lotterySamplePath, function (gltf) {
+    lotterySample = gltf.scene;
+
+    console.log("lottery machine sample");
+    console.log(gltf);
+
+    lotterySample.children[4].material = lotteryMat1;
+    lotterySample.position.set(-200, -350, 0);
+    lotterySample.scale.set(800, 800, 800);
+    scene.add(lotterySample);
+
+    const lotterySampleAnimations = gltf.animations;
+    lotterySampleMixer = new THREE.AnimationMixer(lotterySample);
+    // lotterySampleMixer.clipAction(lotterySampleAnimations[0]).play();
+
+    // Create animation actions for each animation
+    for (let i = 0; i < lotterySampleAnimations.length; i++) {
+      const action = lotterySampleMixer.clipAction(lotterySampleAnimations[i]);
+      lotterySampleAction.push(action);
+      // console.log("sample animation: " + i);
+    }
+
+    // Play all animation actions simultaneously
+    lotterySampleAction.forEach((action) => action.play());
   });
 
   // 마법진?
@@ -223,8 +247,8 @@ function init() {
 
     console.log("ring");
     console.log(gltf);
-    ring.position.set(0, 10, 0);
-    ring.scale.set(15, 15, 15);
+    ring.position.set(0, -130, 0);
+    ring.scale.set(20, 20, 20);
 
     scene.add(ring);
 
@@ -237,26 +261,50 @@ function init() {
   });
 
   // 폭죽
-  const fireworkPath = "./static/model/firework/scene.gltf";
+  // const fireworkPath = "./static/model/firework/scene.gltf";
+  // loader.load(
+  //   fireworkPath,
+  //   function (gltf) {
+  //     firework = gltf.scene;
+
+  //     console.log("firework");
+  //     console.log(gltf);
+  //     firework.position.set(0, 80, 0);
+  //     firework.scale.set(8, 8, 8);
+
+  //     scene.add(firework);
+
+  //     // 폭죽 애니메이션
+  //     const fireAnimations = gltf.animations;
+  //     fireworkMixer = new THREE.AnimationMixer(firework);
+  //     fireworkMixer.clipAction(fireAnimations[0]).play();
+  //     console.log(fireworkMixer.clipAction(fireAnimations[0]));
+
+  //     // animate();
+  //   },
+  //   undefined,
+  //   function (err) {
+  //     console.error(err);
+  //   }
+  // );
+
+  // 스톰트루퍼
+  const trupperPath = "./static/model/dancing_stormtrooper/scene.gltf";
   loader.load(
-    fireworkPath,
+    trupperPath,
     function (gltf) {
-      firework = gltf.scene;
+      trupper = gltf.scene;
 
-      console.log("firework");
+      console.log("trupper");
       console.log(gltf);
-      firework.position.set(0, 80, 0);
-      firework.scale.set(8, 8, 8);
+      trupper.position.set(130, -130, 0);
+      trupper.scale.set(30, 30, 30);
 
-      scene.add(firework);
+      scene.add(trupper);
 
-      // 폭죽 애니메이션
-      const fireAnimations = gltf.animations;
-      fireworkMixer = new THREE.AnimationMixer(firework);
-      fireworkMixer.clipAction(fireAnimations[0]).play();
-      console.log(fireworkMixer.clipAction(fireAnimations[0]));
-
-      // animate();
+      const trupperAnimations = gltf.animations;
+      trupperMixer = new THREE.AnimationMixer(trupper);
+      trupperMixer.clipAction(trupperAnimations[0]).play();
     },
     undefined,
     function (err) {
@@ -265,7 +313,6 @@ function init() {
   );
 
   // animate();
-
   // render();
 }
 
@@ -273,38 +320,49 @@ function animate() {
   requestAnimationFrame(animate);
 
   // mesh.rotation.x += 0.05;
-  mesh.rotation.y += 0.05;
+  // mesh.rotation.y += 0.05;
 
   let mixerUpdateDelta = clock.getDelta();
 
   // console.log(mixerUpdateDelta);
   // console.log(mixer);
 
-  if (fireworkMixer) {
-    fireworkMixer.update(mixerUpdateDelta);
-  }
+  // if (fireworkMixer) {
+  //   fireworkMixer.update(mixerUpdateDelta);
+  // }
 
   if (ringMixer) {
     ringMixer.update(mixerUpdateDelta);
     // ringAction.play();
   }
 
-  if (isRingAnimationPlaying) {
-    ringAction.play();
+  if (trupperMixer) {
+    trupperMixer.update(mixerUpdateDelta);
   }
 
-  if (ballController.moving && isRingAnimationPlaying) {
-    lottery.position.y += 0.2;
-    // dirLight.intensity += 0.01;
-    // ambientLight.intensity += 0.01;
-    // hemiLight.intensity += 0.02;
-    // console.log(lottery.position.y, ballController.limit);
-    console.log("ambientlight intensity: " + ambientLight.intensity);
-    console.log("hemilight intensity: " + hemiLight.intensity);
-    if (lottery.position.y > ballController.limit) {
-      ballController.moving = false;
-    }
+  if (isRingAnimationPlaying) {
+    // lotterySampleAction.forEach((action) => action.play());
+    ringAction.play();
+    lotterySampleMixer.update(mixerUpdateDelta);
   }
+
+  // if (ballController.moving && isRingAnimationPlaying) {
+  // 둥둥
+  // lottery.position.y += 0.2;
+
+  // 빛 밝기 조절
+  // dirLight.intensity += 0.01;
+  // ambientLight.intensity += 0.01;
+  // hemiLight.intensity += 0.02;
+  // console.log(lottery.position.y, ballController.limit);
+  // console.log("ambientlight intensity: " + ambientLight.intensity);
+  // console.log("hemilight intensity: " + hemiLight.intensity);
+
+  // 조건 달성하면 움직임 중지
+  //   if (lottery.position.y > ballController.limit) {
+  //     ballController.moving = false;
+  //   }
+  // }
 
   render();
 }
