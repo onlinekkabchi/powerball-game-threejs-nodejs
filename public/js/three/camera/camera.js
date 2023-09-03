@@ -12,10 +12,10 @@ const camera = new THREE.OrthographicCamera(
   width / 2,
   height / 2,
   height / -2,
-  -500,
-  500 // 카메라 거리
+  -1000,
+  1000 // 카메라 거리
 );
-camera.position.set(0, 5, 10);
+camera.position.set(0, 10, 50);
 // camera.lookAt(0, 0, 0);
 
 // 카메라 궤도 컨트롤러
@@ -29,7 +29,7 @@ function orbitController(camera, renderer) {
   // 줌 비활성화
   // controls.enableZoom = false;
   // 회전 비활성화
-  // controls.enableRotate = false;
+  controls.enableRotate = false;
   controls.update();
 }
 
