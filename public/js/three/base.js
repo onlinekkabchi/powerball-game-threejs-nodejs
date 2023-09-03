@@ -35,6 +35,7 @@ import {
 
 // // 텍스쳐
 import { hdrLoader } from "./camera/hdr.js";
+import { glassMat, transparentMat } from "./texture/glass.js";
 
 const loader = new GLTFLoader();
 const clock = new THREE.Clock();
@@ -108,10 +109,7 @@ function init() {
   // controls.enableRotate = false;
 
   scene.add(ambientLight, dirLight, hemiLight, dirLightHelper, hemiLightHelper);
-  // scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
-  // const light = new THREE.PointLight(0xffffff, 1000, 0, 0);
-
-  scene.add(new THREE.AxesHelper(20));
+  scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
 
   const meshGeometry = new THREE.BoxGeometry(200, 250, 100);
   // const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
@@ -124,7 +122,7 @@ function init() {
 
   mesh = new THREE.Mesh(meshGeometry, meshMaterial);
   mesh.position.set(0, 0, -130);
-  scene.add(mesh);
+  // scene.add(mesh);
 
   // window.addEventListener( 'resize', onWindowResize );
 
@@ -136,9 +134,6 @@ function init() {
   // const hdrPath = "../../../static/background/glitter-3.hdr";
 
   new RGBELoader().load(hdrPath, function (texture) {
-    // console.log("hdrtexture!!");
-    // texture.mapping = THREE.EquirectangularReflectionMapping;
-
     scene.background = texture;
     scene.environment = texture;
   });
@@ -162,26 +157,6 @@ function init() {
 
   // 로터리 머신
   const lotteryPath = "./static/model/lottery-machine/ball-collision-2-1.glb";
-  const lotteryMat1 = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff,
-    metalness: 1,
-    roughness: 0,
-    clearcoat: 1,
-    transparent: true,
-    opacity: 0.5,
-    reflectivity: 0.1,
-    refractionRatio: 0.9,
-    ior: 1,
-    side: THREE.BackSide,
-    envMap: hdrLoader,
-    envMapIntensity: 1,
-    // emissive: 0xffffff,
-    // emissiveIntensity: 0.1,
-  });
-  const lotteryMat2 = new THREE.MeshBasicMaterial({
-    transparent: true,
-    opacity: 0,
-  });
   const ballGeometry = new THREE.SphereGeometry(10, 32, 32);
   const ballMat = new THREE.MeshPhysicalMaterial({
     color: 0xff7900,
@@ -200,8 +175,8 @@ function init() {
     // lottery.children.forEach((el) => {
     //   el.material = lotteryMat1;
     // });
-    lottery.children[3].material = lotteryMat1;
-    lottery.children[2].material = lotteryMat2;
+    lottery.children[3].material = glassMat;
+    lottery.children[2].material = transparentMat;
     lottery.children[1].mesh = ballGeometry;
     lottery.children[1].material = ballMat;
 
@@ -220,9 +195,14 @@ function init() {
     console.log("lottery machine sample");
     console.log(gltf);
 
-    lotterySample.children[4].material = lotteryMat1;
-    lotterySample.position.set(-200, -350, 0);
+    lotterySample.children[0].material = ballMat;
+    lotterySample.children[1].material = ballMat;
+    lotterySample.children[2].material = ballMat;
+    lotterySample.children[3].material = ballMat;
+    lotterySample.children[4].material = transparentMat;
+    lotterySample.position.set(-200, -300, 0);
     lotterySample.scale.set(800, 800, 800);
+    // lotterySample.rotation.y += 90;
     scene.add(lotterySample);
 
     const lotterySampleAnimations = gltf.animations;
