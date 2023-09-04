@@ -33,8 +33,10 @@ import {
 // import { Fox } from "./models/fox.js";
 // import { sphere, sphere1 } from "./models/sphere.js";
 
+// import { spaceman } from "./models/spaceman.js";
+
 // // 텍스쳐
-import { hdrLoader } from "./camera/hdr.js";
+// import { hdrLoader } from "./camera/hdr.js";
 import { glassMat, transparentMat } from "./texture/glass.js";
 
 const loader = new GLTFLoader();
@@ -44,14 +46,18 @@ let animationStartTime = null;
 
 let mesh;
 let firework,
+  fireworkMixer,
   fireworkAction,
   lottery,
+  lotteryMixer,
   lotteryAction,
   ring,
+  ringMixer,
   ringAction,
   trupper,
+  trupperMixer,
   trupperAction;
-let fireworkMixer, ringMixer, lotteryMixer, trupperMixer;
+// let fireworkMixer, ringMixer, lotteryMixer, trupperMixer;
 let lotterySample, lotterySampleMixer;
 let lotterySampleAction = [];
 
@@ -93,7 +99,7 @@ function init() {
     -200,
     250 // 카메라 거리
   );
-  camera.position.set(0, 12, 25);
+  camera.position.set(0, 15, 25);
   camera.lookAt(0, 0, 0);
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -109,7 +115,7 @@ function init() {
   // controls.enableRotate = false;
 
   scene.add(ambientLight, dirLight, hemiLight, dirLightHelper, hemiLightHelper);
-  scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
+  // scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
 
   const meshGeometry = new THREE.BoxGeometry(200, 250, 100);
   // const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
@@ -131,11 +137,12 @@ function init() {
   // const hdrPath = "../../../static/texture/MR_INT-001_NaturalStudio_NAD.hdr";
   // const hdrPath = "../../../static/texture/Window_Lighting_01.jpeg";
   const hdrPath = "../../../static/background/space-1.hdr";
-  // const hdrPath = "../../../static/background/glitter-3.hdr";
+  // const hdrPath = "../../../static/background/milky-way-1.hdr";
+  // const hdrPath = "../../../static/background/night-city-2.hdr";
 
   new RGBELoader().load(hdrPath, function (texture) {
     scene.background = texture;
-    scene.environment = texture;
+    // scene.environment = texture;
   });
 
   // 무대 베이킹본
@@ -144,7 +151,7 @@ function init() {
     function (gltf) {
       const model = gltf.scene;
       model.position.set(0, -130, 20);
-      model.scale.set(25, 25, 25); // orthographic 카메라 사용할때 크기 주의할것
+      model.scale.set(30, 25, 30); // orthographic 카메라 사용할때 크기 주의할것
       scene.add(model);
     },
     function (xhr) {
@@ -156,7 +163,8 @@ function init() {
   );
 
   // 로터리 머신
-  const lotteryPath = "./static/model/lottery-machine/ball-collision-2-1.glb";
+  const lotteryPath =
+    "./static/model/lottery-machine-remake/particle-tester-2.gltf";
   const ballGeometry = new THREE.SphereGeometry(10, 32, 32);
   const ballMat = new THREE.MeshPhysicalMaterial({
     color: 0xff7900,
@@ -175,20 +183,24 @@ function init() {
     // lottery.children.forEach((el) => {
     //   el.material = lotteryMat1;
     // });
-    lottery.children[3].material = glassMat;
-    lottery.children[2].material = transparentMat;
-    lottery.children[1].mesh = ballGeometry;
-    lottery.children[1].material = ballMat;
+    lottery.children[1].material = glassMat;
+    // lottery.children[11].material = transparentMat;
+    // lottery.children[2].mesh = ballGeometry;
+    // lottery.children[1].material = ballMat;
 
     lottery.position.set(0, -30, 0);
     lottery.scale.set(20, 20, 20);
 
     scene.add(lottery);
+
+    const animations = gltf.animations;
+    lotteryMixer = new THREE.AnimationMixer(lottery);
+    lotteryAction = lotteryMixer.clipAction(animations[0]).play();
   });
 
   // 샘플 로터리 머신
   const lotterySamplePath =
-    "./static/model/lottery-machine/lottery-machine2.glb";
+    "./static/model/lottery-machine-remake/particle-tester-2.gltf";
   loader.load(lotterySamplePath, function (gltf) {
     lotterySample = gltf.scene;
 
@@ -199,9 +211,9 @@ function init() {
     lotterySample.children[1].material = ballMat;
     lotterySample.children[2].material = ballMat;
     lotterySample.children[3].material = ballMat;
-    lotterySample.children[4].material = transparentMat;
-    lotterySample.position.set(-200, -300, 0);
-    lotterySample.scale.set(800, 800, 800);
+    lotterySample.children[4].material = glassMat;
+    lotterySample.position.set(-200, 0, 0);
+    lotterySample.scale.set(20, 20, 20);
     // lotterySample.rotation.y += 90;
     scene.add(lotterySample);
 
@@ -228,7 +240,7 @@ function init() {
     console.log("ring");
     console.log(gltf);
     ring.position.set(0, -130, 0);
-    ring.scale.set(20, 20, 20);
+    ring.scale.set(25, 25, 25);
 
     scene.add(ring);
 
@@ -280,7 +292,7 @@ function init() {
       trupper.position.set(130, -130, 0);
       trupper.scale.set(30, 30, 30);
 
-      scene.add(trupper);
+      // scene.add(trupper);
 
       const trupperAnimations = gltf.animations;
       trupperMixer = new THREE.AnimationMixer(trupper);
@@ -291,6 +303,9 @@ function init() {
       console.error(err);
     }
   );
+
+  // 우주복
+  // spaceman(scene);
 
   // animate();
   // render();
@@ -324,6 +339,7 @@ function animate() {
     // lotterySampleAction.forEach((action) => action.play());
     ringAction.play();
     lotterySampleMixer.update(mixerUpdateDelta);
+    lotteryMixer.update(mixerUpdateDelta);
   }
 
   // if (ballController.moving && isRingAnimationPlaying) {
