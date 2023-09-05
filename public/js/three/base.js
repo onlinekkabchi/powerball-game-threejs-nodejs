@@ -2,6 +2,13 @@
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
+import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
+
+// 이펙트
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
+// import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 // threejs 인스턴스
 // import { gridHelper, axesHelper } from "./helper/helper.js";
@@ -40,6 +47,7 @@ import {
 import { glassMat, transparentMat } from "./texture/glass.js";
 
 const loader = new GLTFLoader();
+const fbxLoader = new FBXLoader();
 const clock = new THREE.Clock();
 
 let animationStartTime = null;
@@ -56,7 +64,10 @@ let firework,
   ringAction,
   trupper,
   trupperMixer,
-  trupperAction;
+  trupperAction,
+  particle,
+  particleMixer,
+  particleAction;
 // let fireworkMixer, ringMixer, lotteryMixer, trupperMixer;
 let lotterySample, lotterySampleMixer;
 let lotterySampleAction = [];
@@ -66,13 +77,11 @@ let group, camera, scene, renderer;
 let isRingAnimationPlaying = false;
 let animations;
 
+let composer;
+
 let ballController = {
   moving: false,
   limit: 10,
-};
-let lightIntensity = {
-  hemiLight: 1,
-  ambientLight: 1,
 };
 
 init();
@@ -105,6 +114,8 @@ function init() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight * 0.7); // 캔버스 사이즈
+  renderer.toneMapping = THREE.ReinhardToneMapping;
+
   document.body.appendChild(renderer.domElement);
 
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -114,9 +125,35 @@ function init() {
   controls.maxPolarAngle = Math.PI / 2;
   // controls.enableRotate = false;
 
-  scene.add(ambientLight, dirLight, hemiLight, dirLightHelper, hemiLightHelper);
-  // scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
+  scene.add(
+    ambientLight,
+    dirLight,
+    hemiLight
+    // dirLightHelper, hemiLightHelper
+  );
+  scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
 
+  // 블룸효과
+  const renderScene = new RenderPass(scene, camera);
+  const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    1.5,
+    0.4,
+    0.85
+  );
+  bloomPass.threshold = 0;
+  bloomPass.strength = 1;
+  bloomPass.radius = 1;
+
+  // const outputPass = new OutputPass();
+
+  composer = new EffectComposer(renderer);
+  composer.addPass(renderScene);
+  composer.addPass(bloomPass);
+  // composer.addPass(outputPass);
+  // composer.setSize(window.innerWidth, window.innerHeight * 0.7);
+
+  // 테스트 박스
   const meshGeometry = new THREE.BoxGeometry(200, 250, 100);
   // const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
   const meshMaterial = new THREE.MeshLambertMaterial({
@@ -136,9 +173,10 @@ function init() {
   // const hdrPath = "../../../static/texture/MR_INT-005_WhiteNeons_NAD.hdr";
   // const hdrPath = "../../../static/texture/MR_INT-001_NaturalStudio_NAD.hdr";
   // const hdrPath = "../../../static/texture/Window_Lighting_01.jpeg";
-  const hdrPath = "../../../static/background/space-1.hdr";
+  // const hdrPath = "../../../static/background/space-1.hdr";
   // const hdrPath = "../../../static/background/milky-way-1.hdr";
   // const hdrPath = "../../../static/background/night-city-2.hdr";
+  const hdrPath = "../../../static/background/green-galaxy-1.hdr";
 
   new RGBELoader().load(hdrPath, function (texture) {
     scene.background = texture;
@@ -164,7 +202,7 @@ function init() {
 
   // 로터리 머신
   const lotteryPath =
-    "./static/model/lottery-machine-remake/particle-tester-2.gltf";
+    "./static/model/lottery-machine-remake/simulation-to-mesh-1.gltf";
   const ballGeometry = new THREE.SphereGeometry(10, 32, 32);
   const ballMat = new THREE.MeshPhysicalMaterial({
     color: 0xff7900,
@@ -186,12 +224,12 @@ function init() {
     lottery.children[1].material = glassMat;
     // lottery.children[11].material = transparentMat;
     // lottery.children[2].mesh = ballGeometry;
-    // lottery.children[1].material = ballMat;
+    lottery.children[0].material = ballMat;
 
     lottery.position.set(0, -30, 0);
     lottery.scale.set(20, 20, 20);
 
-    scene.add(lottery);
+    // scene.add(lottery);
 
     const animations = gltf.animations;
     lotteryMixer = new THREE.AnimationMixer(lottery);
@@ -199,26 +237,34 @@ function init() {
   });
 
   // 샘플 로터리 머신
-  const lotterySamplePath =
-    "./static/model/lottery-machine-remake/particle-tester-2.gltf";
+  const lotterySamplePath = "./static/model/simulation/emitter-final-3.gltf";
   loader.load(lotterySamplePath, function (gltf) {
     lotterySample = gltf.scene;
 
     console.log("lottery machine sample");
     console.log(gltf);
 
-    lotterySample.children[0].material = ballMat;
-    lotterySample.children[1].material = ballMat;
-    lotterySample.children[2].material = ballMat;
-    lotterySample.children[3].material = ballMat;
-    lotterySample.children[4].material = glassMat;
-    lotterySample.position.set(-200, 0, 0);
+    // lotterySample.children[113].material = ballMat;
+    // lotterySample.children[0].material = transparentMat;
+    lotterySample.children[0].material = glassMat;
+    lotterySample.children[1].material = transparentMat;
+    lotterySample.children[2].material = transparentMat;
+
+    for (let i = 3; i < lotterySample.children.length - 1; i++) {
+      const element = lotterySample.children[i];
+      element.material = ballMat;
+    }
+
+    // lotterySample.children.forEach((el) => (el.material = ballMat));
+
+    lotterySample.position.set(0, 10, 0);
     lotterySample.scale.set(20, 20, 20);
     // lotterySample.rotation.y += 90;
     scene.add(lotterySample);
 
     const lotterySampleAnimations = gltf.animations;
     lotterySampleMixer = new THREE.AnimationMixer(lotterySample);
+
     // lotterySampleMixer.clipAction(lotterySampleAnimations[0]).play();
 
     // Create animation actions for each animation
@@ -246,7 +292,7 @@ function init() {
 
     const animations = gltf.animations;
     ringMixer = new THREE.AnimationMixer(ring);
-    ringAction = ringMixer.clipAction(animations[0]);
+    ringAction = ringMixer.clipAction(animations[0]).play();
     // console.log(ringMixer.clipAction(animations[0]));
 
     animate();
@@ -292,7 +338,7 @@ function init() {
       trupper.position.set(130, -130, 0);
       trupper.scale.set(30, 30, 30);
 
-      // scene.add(trupper);
+      scene.add(trupper);
 
       const trupperAnimations = gltf.animations;
       trupperMixer = new THREE.AnimationMixer(trupper);
@@ -360,6 +406,7 @@ function animate() {
   //   }
   // }
 
+  composer.render();
   render();
 }
 
