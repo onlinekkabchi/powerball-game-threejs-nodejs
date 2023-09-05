@@ -19,7 +19,7 @@ import { hdrLoader } from "../camera/hdr.js";
 // });
 const glassMat = new THREE.MeshPhysicalMaterial({
   color: 0xffffff,
-  metalness: 0,
+  // metalness: 0,
   roughness: 0,
   clearcoat: 1,
   // transmission: 1,
