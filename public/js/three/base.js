@@ -45,6 +45,7 @@ import {
 // // 텍스쳐
 // import { hdrLoader } from "./camera/hdr.js";
 import { glassMat, transparentMat } from "./texture/glass.js";
+import { ballMat } from "./text/lottery-ball.js";
 
 const loader = new GLTFLoader();
 const fbxLoader = new FBXLoader();
@@ -127,6 +128,7 @@ function init() {
   controls.maxPolarAngle = Math.PI / 2;
   // controls.enableRotate = false;
 
+  // 빛 추가
   scene.add(
     ambientLight,
     dirLight,
@@ -134,6 +136,15 @@ function init() {
     // dirLightHelper, hemiLightHelper
   );
   scene.add(pointLight, pointLightHelper, pointLight2, pointLightHelper2);
+
+  // 안개 추가
+  // Create a fog with the desired color and initial density
+  const fogColor = 0x000104;
+  const fogDensity = 0.003;
+  const fog = new THREE.FogExp2(fogColor, fogDensity);
+
+  // Assign the fog to the scene
+  scene.fog = fog;
 
   // 블룸효과
   const renderScene = new RenderPass(scene, camera);
@@ -169,9 +180,10 @@ function init() {
   mesh.position.set(0, 0, -130);
   // scene.add(mesh);
 
-  const sphereGeometry = new THREE.SphereGeometry(100, 32, 32);
+  // 테스트 스피어
+  const sphereGeometry = new THREE.SphereGeometry(90, 32, 32);
   const testSphere = new THREE.Mesh(sphereGeometry, glassMat);
-  testSphere.position.set(-200, 0, 0); // x: -180
+  testSphere.position.set(-300, 0, 0); // x: -180
   scene.add(testSphere);
 
   // window.addEventListener( 'resize', onWindowResize );
@@ -196,7 +208,7 @@ function init() {
     function (gltf) {
       const model = gltf.scene;
       model.position.set(0, -130, 20);
-      model.scale.set(30, 25, 30); // orthographic 카메라 사용할때 크기 주의할것
+      model.scale.set(40, 40, 40); // orthographic 카메라 사용할때 크기 주의할것
       scene.add(model);
     },
     function (xhr) {
@@ -211,14 +223,7 @@ function init() {
   const lotteryPath =
     "./static/model/lottery-machine-remake/simulation-to-mesh-1.gltf";
   const ballGeometry = new THREE.SphereGeometry(10, 32, 32);
-  const ballMat = new THREE.MeshPhysicalMaterial({
-    color: 0xff7900,
-    metalness: 0.9,
-    roughness: 0,
-    clearcoat: 1,
-    // emissive: 0xffffff,
-    // emissiveIntensity: 1,
-  });
+
   loader.load(lotteryPath, function (gltf) {
     lottery = gltf.scene;
 
@@ -264,8 +269,8 @@ function init() {
 
     // lotterySample.children.forEach((el) => (el.material = ballMat));
 
-    lotterySample.position.set(0, 10, 0);
-    lotterySample.scale.set(20, 20, 20);
+    lotterySample.position.set(0, 60, 0);
+    lotterySample.scale.set(30, 30, 30);
     // lotterySample.rotation.y += 90;
     scene.add(lotterySample);
 
@@ -293,7 +298,7 @@ function init() {
     console.log("ring");
     console.log(gltf);
     ring.position.set(0, -130, 0);
-    ring.scale.set(25, 25, 25);
+    ring.scale.set(30, 30, 30);
 
     scene.add(ring);
 
@@ -342,8 +347,8 @@ function init() {
 
       console.log("trupper");
       console.log(gltf);
-      trupper.position.set(250, -145, 100);
-      trupper.scale.set(30, 30, 30);
+      trupper.position.set(250, -100, 30);
+      trupper.scale.set(50, 50, 50);
 
       scene.add(trupper);
 
