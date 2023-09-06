@@ -3,10 +3,15 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { FBXLoader } from "three/addons/loaders/FBXLoader.js";
+import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 
 // 이펙트
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { BloomPass } from "three/addons/postprocessing/BloomPass.js";
+import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
+import { FocusShader } from "three/addons/shaders/FocusShader.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 // import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
@@ -45,10 +50,12 @@ import {
 // // 텍스쳐
 // import { hdrLoader } from "./camera/hdr.js";
 import { glassMat, transparentMat } from "./texture/glass.js";
-import { ballMat } from "./text/lottery-ball.js";
+import { ballMat } from "./texture/lottery-ball.js";
 
 const loader = new GLTFLoader();
+const rgbeLoader = new RGBELoader();
 const fbxLoader = new FBXLoader();
+const objLoader = new OBJLoader();
 const clock = new THREE.Clock();
 
 let animationStartTime = null;
@@ -88,7 +95,7 @@ let ballController = {
 init();
 
 function init() {
-  console.log("scene");
+  console.log("init function start");
 
   scene = new THREE.Scene();
   // scene.background = new THREE.Color(0xebebeb);
@@ -157,6 +164,7 @@ function init() {
   bloomPass.threshold = 0;
   bloomPass.strength = 1;
   bloomPass.radius = 1;
+  // const bloomPass = new BloomPass(0.75);
 
   // const outputPass = new OutputPass();
 
@@ -165,6 +173,16 @@ function init() {
   composer.addPass(bloomPass);
   // composer.addPass(outputPass);
   // composer.setSize(window.innerWidth, window.innerHeight * 0.7);
+
+  // 테스트 알
+  const eggPath = "../../../static/model/egg/egg.obj";
+  objLoader.load(eggPath, function (obj) {
+    // const positions = combineBuffer(obj, "position");
+    // createMesh(positions, scene, 4.05, -500, -350, 600, 0xff7744);
+    // createMesh(positions, scene, 4.05, 500, -350, 0, 0xff5522);
+    // createMesh(positions, scene, 4.05, -250, -350, 1500, 0xff9922);
+    // createMesh(positions, scene, 4.05, -250, -350, -1500, 0xff99ff);
+  });
 
   // 테스트 박스
   const meshGeometry = new THREE.BoxGeometry(200, 250, 100);
@@ -196,8 +214,9 @@ function init() {
   // const hdrPath = "../../../static/background/milky-way-1.hdr";
   // const hdrPath = "../../../static/background/night-city-2.hdr";
   const hdrPath = "../../../static/background/green-galaxy-1.hdr";
+  // const hdrPath = "../../../static/background/space-green-1.hdr";
 
-  new RGBELoader().load(hdrPath, function (texture) {
+  rgbeLoader.load(hdrPath, function (texture) {
     scene.background = texture;
     // scene.environment = texture;
   });
