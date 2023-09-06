@@ -22,7 +22,7 @@ const glassMat = new THREE.MeshPhysicalMaterial({
   // metalness: 0,
   roughness: 0,
   clearcoat: 1,
-  // transmission: 1,
+  // transmission: 0.5,
   transparent: true,
   // opacity: 0.5,
   // reflectivity: 0.1,
@@ -30,7 +30,8 @@ const glassMat = new THREE.MeshPhysicalMaterial({
   ior: 2.33,
   envMap: hdrLoader,
   envMapIntensity: 1,
-  opacity: 0.3,
+  opacity: 1,
+  side: THREE.BackSide,
 });
 const transparentMat = new THREE.MeshBasicMaterial({
   transparent: true,

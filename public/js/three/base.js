@@ -167,6 +167,11 @@ function init() {
   mesh.position.set(0, 0, -130);
   // scene.add(mesh);
 
+  const sphereGeometry = new THREE.SphereGeometry(60, 32, 32);
+  const testSphere = new THREE.Mesh(sphereGeometry, glassMat);
+  testSphere.position.set(-180, 0, 0);
+  scene.add(testSphere);
+
   // window.addEventListener( 'resize', onWindowResize );
 
   // 전체 배경
