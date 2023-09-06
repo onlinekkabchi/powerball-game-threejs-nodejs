@@ -18,11 +18,11 @@ import { hdrLoader } from "../camera/hdr.js";
 //   // emissiveIntensity: 0.1,
 // });
 const glassMat = new THREE.MeshPhysicalMaterial({
-  color: 0xffffff,
-  metalness: 1,
+  // color: 0xffffff,
+  // metalness: 0,
   roughness: 0,
   clearcoat: 1,
-  transmission: 0, // 값을 올릴 경우 화면 톤전체가 엄청 밝아짐
+  transmission: 1, // 값을 올릴 경우 화면 톤전체가 엄청 밝아짐
   transparent: true,
   opacity: 0.5,
   reflectivity: 1,

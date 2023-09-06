@@ -114,7 +114,9 @@ function init() {
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight * 0.7); // 캔버스 사이즈
-  renderer.toneMapping = THREE.ReinhardToneMapping;
+  // renderer.toneMapping = THREE.ReinhardToneMapping;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  // renderer.toneMapping = THREE.CineonToneMapping;
 
   document.body.appendChild(renderer.domElement);
 
@@ -167,9 +169,9 @@ function init() {
   mesh.position.set(0, 0, -130);
   // scene.add(mesh);
 
-  const sphereGeometry = new THREE.SphereGeometry(60, 32, 32);
+  const sphereGeometry = new THREE.SphereGeometry(100, 32, 32);
   const testSphere = new THREE.Mesh(sphereGeometry, glassMat);
-  testSphere.position.set(-180, 0, 0);
+  testSphere.position.set(-200, 0, 0); // x: -180
   scene.add(testSphere);
 
   // window.addEventListener( 'resize', onWindowResize );
@@ -340,7 +342,7 @@ function init() {
 
       console.log("trupper");
       console.log(gltf);
-      trupper.position.set(130, -130, 0);
+      trupper.position.set(250, -145, 100);
       trupper.scale.set(30, 30, 30);
 
       scene.add(trupper);
