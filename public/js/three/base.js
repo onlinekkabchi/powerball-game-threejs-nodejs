@@ -169,8 +169,11 @@ function init() {
   // const outputPass = new OutputPass();
 
   composer = new EffectComposer(renderer);
+
   composer.addPass(renderScene);
   composer.addPass(bloomPass);
+  console.log("composer");
+  console.log(composer);
   // composer.addPass(outputPass);
   // composer.setSize(window.innerWidth, window.innerHeight * 0.7);
 
@@ -239,73 +242,92 @@ function init() {
   );
 
   // 로터리 머신
-  const lotteryPath =
-    "./static/model/lottery-machine-remake/simulation-to-mesh-1.gltf";
-  const ballGeometry = new THREE.SphereGeometry(10, 32, 32);
+  // const lotteryPath =
+  //   "./static/model/lottery-machine-remake/simulation-to-mesh-1.gltf";
+  // loader.load(lotteryPath, function (gltf) {
+  //   lottery = gltf.scene;
 
-  loader.load(lotteryPath, function (gltf) {
-    lottery = gltf.scene;
+  //   console.log("lottery machine");
+  //   console.log(gltf);
 
-    console.log("lottery machine");
-    console.log(gltf);
+  //   lottery.children[1].material = glassMat;
+  //   lottery.children[0].material = ballMat;
 
-    // lottery.children.forEach((el) => {
-    //   el.material = lotteryMat1;
-    // });
-    lottery.children[1].material = glassMat;
-    // lottery.children[11].material = transparentMat;
-    // lottery.children[2].mesh = ballGeometry;
-    lottery.children[0].material = ballMat;
+  //   lottery.position.set(0, -30, 0);
+  //   lottery.scale.set(20, 20, 20);
 
-    lottery.position.set(0, -30, 0);
-    lottery.scale.set(20, 20, 20);
+  //   // scene.add(lottery);
 
-    // scene.add(lottery);
-
-    const animations = gltf.animations;
-    lotteryMixer = new THREE.AnimationMixer(lottery);
-    lotteryAction = lotteryMixer.clipAction(animations[0]).play();
-  });
+  //   const animations = gltf.animations;
+  //   lotteryMixer = new THREE.AnimationMixer(lottery);
+  //   lotteryAction = lotteryMixer.clipAction(animations[0]).play();
+  // });
 
   // 샘플 로터리 머신
-  const lotterySamplePath = "./static/model/simulation/emitter-final-3.gltf";
+  // const lotterySamplePath = "./static/model/simulation/emitter-final-3.gltf";
+
+  // 볼 컬러테스트
+  const testMaterial1 = new THREE.MeshPhysicalMaterial({
+    color: 0xd4ff6c,
+    metalness: 0.9,
+    roughness: 0.1,
+    clearcoat: 1,
+  });
+  const testMaterial2 = new THREE.MeshPhysicalMaterial({
+    color: 0xffffc0,
+    metalness: 0.9,
+    roughness: 0.1,
+    clearcoat: 1,
+  });
+  const testMaterial3 = new THREE.MeshPhysicalMaterial({
+    color: 0x00a4f0,
+    metalness: 0.9,
+    roughness: 0.1,
+    clearcoat: 1,
+  });
+  const lotterySamplePath =
+    "./static/model/lottery-machine-remake/tester-1/lottery-machine-remake-progress-1.gltf";
   loader.load(lotterySamplePath, function (gltf) {
     lotterySample = gltf.scene;
 
     console.log("lottery machine sample");
     console.log(gltf);
 
-    // lotterySample.children[113].material = ballMat;
-    // lotterySample.children[0].material = transparentMat;
     lotterySample.children[0].material = glassMat;
-    lotterySample.children[1].material = transparentMat;
+    lotterySample.children[1].material = ballMat;
     lotterySample.children[2].material = transparentMat;
 
-    for (let i = 3; i < lotterySample.children.length - 1; i++) {
+    for (let i = 3; i < 10; i++) {
       const element = lotterySample.children[i];
       element.material = ballMat;
     }
-
-    // lotterySample.children.forEach((el) => (el.material = ballMat));
+    for (let i = 10; i < 20; i++) {
+      const element = lotterySample.children[i];
+      element.material = testMaterial1;
+    }
+    for (let i = 20; i < 30; i++) {
+      const element = lotterySample.children[i];
+      element.material = testMaterial2;
+    }
+    for (let i = 30; i < lotterySample.children.length; i++) {
+      const element = lotterySample.children[i];
+      element.material = testMaterial3;
+    }
 
     lotterySample.position.set(0, 60, 0);
     lotterySample.scale.set(30, 30, 30);
-    // lotterySample.rotation.y += 90;
     scene.add(lotterySample);
 
     const lotterySampleAnimations = gltf.animations;
     lotterySampleMixer = new THREE.AnimationMixer(lotterySample);
 
-    // lotterySampleMixer.clipAction(lotterySampleAnimations[0]).play();
-
-    // Create animation actions for each animation
+    // // Create animation actions for each animation
     for (let i = 0; i < lotterySampleAnimations.length; i++) {
       const action = lotterySampleMixer.clipAction(lotterySampleAnimations[i]);
       lotterySampleAction.push(action);
-      // console.log("sample animation: " + i);
     }
 
-    // Play all animation actions simultaneously
+    // // Play all animation actions simultaneously
     lotterySampleAction.forEach((action) => action.play());
   });
 
@@ -413,10 +435,9 @@ function animate() {
   }
 
   if (isRingAnimationPlaying) {
-    // lotterySampleAction.forEach((action) => action.play());
-    ringAction.play();
+    //   ringAction.play();
     lotterySampleMixer.update(mixerUpdateDelta);
-    lotteryMixer.update(mixerUpdateDelta);
+    //   lotteryMixer.update(mixerUpdateDelta);
   }
 
   // if (ballController.moving && isRingAnimationPlaying) {
