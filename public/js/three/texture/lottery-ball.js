@@ -7,8 +7,25 @@ const params = {
   bloomRadius: 0,
 };
 
-const ballMat = new THREE.MeshPhysicalMaterial({
+const ballMatGreen = new THREE.MeshPhysicalMaterial({
   color: 0x6aa68b,
+  metalness: 0.9,
+  roughness: 0.1,
+  clearcoat: 1,
+  emissive: 0xffffff,
+  emissiveIntensity: 0.1,
+});
+
+const ballMatYellow = new THREE.MeshPhysicalMaterial({
+  color: 0xfdd017,
+  metalness: 0.9,
+  roughness: 0.1,
+  clearcoat: 1,
+  emissive: 0xffffff,
+  emissiveIntensity: 0.1,
+});
+const ballMatOrange = new THREE.MeshPhysicalMaterial({
+  color: 0xfa8223,
   metalness: 0.9,
   roughness: 0.1,
   clearcoat: 1,
@@ -20,4 +37,4 @@ const darkMat = new THREE.MeshBasicMaterial({ color: "black" });
 
 const glowBallMat = null;
 
-export { ballMat, glowBallMat };
+export { ballMatGreen, ballMatYellow, ballMatOrange, glowBallMat };
