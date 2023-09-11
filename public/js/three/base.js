@@ -212,7 +212,7 @@ function init() {
   const sphereGeometry = new THREE.SphereGeometry(90, 32, 32);
   const testSphere = new THREE.Mesh(sphereGeometry, glassMat);
   testSphere.position.set(-300, 0, 0); // x: -180
-  scene.add(testSphere);
+  // scene.add(testSphere);
 
   // window.addEventListener( 'resize', onWindowResize );
 
@@ -266,7 +266,7 @@ function init() {
     lottery.position.set(300, -350, 0);
     lottery.scale.set(1100, 1100, 1100);
 
-    scene.add(lottery);
+    // scene.add(lottery);
 
     const lotteryAnimations = gltf.animations;
     lotteryMixer = new THREE.AnimationMixer(lottery);
@@ -283,19 +283,19 @@ function init() {
   // 샘플 로터리 머신
   // const lotterySamplePath = "./static/model/simulation/emitter-final-3.gltf";
   const lotterySamplePath =
-    "./static/model/lottery-machine-remake/tester-3/lottery-machine-rigid-2.gltf";
+    "./static/model/lottery-machine-remake/tester-3/lottery-machine-rigid-5.gltf";
   loader.load(lotterySamplePath, function (gltf) {
     lotterySample = gltf.scene;
 
     console.log("lottery machine sample");
     console.log(gltf);
 
-    lotterySample.children[4].material = transparentMat;
-    lotterySample.children[3].material = glassMat;
+    lotterySample.children[3].material = transparentMat;
+    lotterySample.children[12].material = glassMat;
 
     lotterySample.children[2].material = ballMatGreen;
     // lotterySample.children[3].material = ballMatGreen;
-    // lotterySample.children[4].material = ballMatYellow;
+    lotterySample.children[4].material = ballMatYellow;
     lotterySample.children[5].material = ballMatOrange;
     lotterySample.children[6].material = ballMatOrange;
     lotterySample.children[7].material = ballMatOrange;
@@ -303,7 +303,7 @@ function init() {
     lotterySample.children[9].material = ballMatOrange;
     lotterySample.children[10].material = ballMatYellow;
     lotterySample.children[11].material = ballMatYellow;
-    lotterySample.children[12].material = ballMatYellow;
+    // lotterySample.children[12].material = ballMatYellow;
 
     // for (let i = 6; i < lotterySample.children.length; i++) {
     //   const element = lotterySample.children[i];
@@ -433,7 +433,7 @@ function animate() {
 
   if (isRingAnimationPlaying) {
     //   ringAction.play();
-    lotterySampleMixer.update(mixerUpdateDelta);
+    lotterySampleMixer.update(mixerUpdateDelta * 3);
     lotteryMixer.update(mixerUpdateDelta);
   }
 
