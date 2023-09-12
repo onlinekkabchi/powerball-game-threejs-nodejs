@@ -287,7 +287,7 @@ function init() {
   // 샘플 로터리 머신
   // const lotterySamplePath = "./static/model/simulation/emitter-final-3.gltf";
   const lotterySamplePath =
-    "./static/model/lottery-machine-remake/tester-3/lottery-machine-rigid-10.gltf";
+    "./static/model/lottery-machine-remake/tester-3/lottery-machine-rigid-12.gltf";
   loader.load(lotterySamplePath, function (gltf) {
     lotterySample = gltf.scene;
 
@@ -314,7 +314,6 @@ function init() {
     lotterySample.children[16].material = ballMatYellow;
     lotterySample.children[17].material = ballMatYellow;
     lotterySample.children[18].material = ballMatYellow;
-    lotterySample.children[19].material = ballMatYellow;
 
     // for (let i = 6; i < lotterySample.children.length; i++) {
     //   const element = lotterySample.children[i];
@@ -444,7 +443,7 @@ function animate() {
 
   if (isRingAnimationPlaying) {
     //   ringAction.play();
-    lotterySampleMixer.update(mixerUpdateDelta * 3);
+    lotterySampleMixer.update(mixerUpdateDelta * 2);
     lotteryMixer.update(mixerUpdateDelta);
   }
 
