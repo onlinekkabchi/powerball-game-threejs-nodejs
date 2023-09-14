@@ -242,14 +242,18 @@ function init() {
     // scene.environment = texture;
   });
 
-  // 무대 베이킹본
+  // 무대
+  // const stagePath =  "./static/model/stage/stage-retouch-1.gltf";
+  const stagePath = "./static/model/stage-baked/scene.gltf";
   loader.load(
-    "./static/model/stage-baked/scene.gltf",
+    stagePath,
     function (gltf) {
       const model = gltf.scene;
       model.position.set(0, -130, 20);
       model.scale.set(40, 40, 40); // orthographic 카메라 사용할때 크기 주의할것
       scene.add(model);
+
+      model.children.forEach((el) => (el.material = ballMatBlue));
     },
     function (xhr) {
       console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
@@ -294,7 +298,7 @@ function init() {
   // 샘플 로터리 머신
   // const lotterySamplePath = "./static/model/simulation/emitter-final-3.gltf";
   const lotterySamplePath =
-    "./static/model/lottery-machine-remake/tester-3/lottery-machine-wind-2.gltf";
+    "./static/model/lottery-machine-remake/tester-3/lottery-machine-wind-3.gltf";
   loader.load(lotterySamplePath, function (gltf) {
     lotterySample = gltf.scene;
 
@@ -321,11 +325,17 @@ function init() {
     lotterySample.children[16].material = ballMatGreen;
     lotterySample.children[17].material = ballMatRed;
     lotterySample.children[18].material = ballMatRed;
-
-    // for (let i = 6; i < lotterySample.children.length; i++) {
-    //   const element = lotterySample.children[i];
-    //   element.material = testMaterial3;
-    // }
+    lotterySample.children[19].material = ballMatRed;
+    lotterySample.children[20].material = ballMatRed;
+    lotterySample.children[21].material = ballMatYellow;
+    lotterySample.children[22].material = ballMatYellow;
+    lotterySample.children[23].material = ballMatYellow;
+    lotterySample.children[24].material = ballMatYellow;
+    lotterySample.children[25].material = ballMatBlue;
+    lotterySample.children[26].material = ballMatBlue;
+    lotterySample.children[27].material = ballMatBlue;
+    lotterySample.children[28].material = ballMatBlue;
+    lotterySample.children[29].material = ballMatBlue;
 
     lotterySample.position.set(0, 60, 0);
     lotterySample.scale.set(40, 40, 40);
