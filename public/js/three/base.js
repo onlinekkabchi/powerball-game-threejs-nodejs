@@ -9,12 +9,15 @@ import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 // 이펙트
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-// import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 // import { BloomPass } from "three/addons/postprocessing/BloomPass.js";
 // import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
 // import { FocusShader } from "three/addons/shaders/FocusShader.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 // import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+
+import { LuminosityShader } from "three/addons/shaders/LuminosityShader.js";
+import { SobelOperatorShader } from "three/addons/shaders/SobelOperatorShader.js";
 
 // threejs 인스턴스
 // import { gridHelper, axesHelper } from "./helper/helper.js";
@@ -184,6 +187,8 @@ function init() {
   // 보정
   composer = new EffectComposer(renderer);
 
+  const shader = new ShaderPass(LuminosityShader);
+
   composer.addPass(renderScene);
   composer.addPass(bloomPass);
   console.log("composer");
@@ -191,6 +196,7 @@ function init() {
   console.log(renderScene);
   console.log(bloomPass);
   // console.log(outputPass);
+  console.log(shader);
 
   // composer.addPass(outputPass);
   // composer.setSize(window.innerWidth, window.innerHeight * 0.7);
@@ -298,7 +304,7 @@ function init() {
   // 샘플 로터리 머신
   // const lotterySamplePath = "./static/model/simulation/emitter-final-3.gltf";
   const lotterySamplePath =
-    "./static/model/lottery-machine-remake/tester-3/lottery-machine-wind-3.gltf";
+    "./static/model/lottery-machine-remake/tester-3/lottery-machine-wind-4.gltf";
   loader.load(lotterySamplePath, function (gltf) {
     lotterySample = gltf.scene;
 

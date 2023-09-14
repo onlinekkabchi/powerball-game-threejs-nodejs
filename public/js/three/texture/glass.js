@@ -17,8 +17,27 @@ import { hdrLoader } from "../camera/hdr.js";
 //   // emissive: 0xffffff,
 //   // emissiveIntensity: 0.1,
 // });
+
+function generateTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 2;
+  canvas.height = 2;
+
+  const context = canvas.getContext("2d");
+  context.fillStyle = "white";
+  context.fillRect(0, 1, 2, 1);
+
+  return canvas;
+}
+
+const glassTexture = new THREE.CanvasTexture(generateTexture());
+glassTexture.magFilter = THREE.NearestFilter;
+glassTexture.wrapT = THREE.RepeatWrapping;
+glassTexture.wrapS = THREE.RepeatWrapping;
+glassTexture.repeat.set(1, 3.5);
+
 const glassMat = new THREE.MeshPhysicalMaterial({
-  // color: 0xffffff,
+  color: 0xffffff,
   // metalness: 0,
   roughness: 0,
   clearcoat: 1,
@@ -27,11 +46,14 @@ const glassMat = new THREE.MeshPhysicalMaterial({
   opacity: 0.5,
   reflectivity: 1,
   // refractionRatio: 0.9,
-  ior: 2.33,
+  ior: 2.53,
+  // alphaMap: glassTexture,
   envMap: hdrLoader,
   envMapIntensity: 1,
   opacity: 1,
   side: THREE.BackSide,
+  transparent: true,
+  exposure: 1,
 });
 const transparentMat = new THREE.MeshBasicMaterial({
   transparent: true,
