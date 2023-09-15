@@ -125,7 +125,7 @@ function init() {
     window.innerHeight / 2,
     window.innerHeight / -2,
     -600,
-    500 // 카메라 거리
+    1000 // 카메라 거리
   );
   camera.position.set(0, 55, 120);
   camera.lookAt(0, 0, 0);
@@ -185,12 +185,12 @@ function init() {
 
   // 안개 추가
   // Create a fog with the desired color and initial density
-  // const fogColor = 0x000104;
-  // const fogDensity = 0.003;
-  // const fog = new THREE.FogExp2(fogColor, fogDensity);
+  const fogColor = 0x000104;
+  const fogDensity = 0.003;
+  const fog = new THREE.FogExp2(fogColor, fogDensity);
 
   // Assign the fog to the scene
-  // scene.fog = fog;
+  scene.fog = fog;
 
   // 보정
   const target = new THREE.WebGLRenderTarget(
@@ -214,14 +214,11 @@ function init() {
 
   const bloomParams = {
     threshold: 0,
-    strength: 1,
+    strength: 0.15,
     radius: 0.5,
     exposure: 1,
     scene: "SCENE WITH GLOW",
   };
-  const darkMaterial = new THREE.MeshBasicMaterial({ color: "black" });
-  const materials = {};
-
   const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
     1.5,
@@ -276,7 +273,7 @@ function init() {
   composer = new EffectComposer(renderer);
   composer.addPass(renderPass);
   composer.addPass(bloomPass);
-  composer.addPass(outputPass);
+  // composer.addPass(outputPass);
 
   console.log("composer");
   console.log(composer);
@@ -386,7 +383,8 @@ function init() {
     console.log("lottery machine sample");
     console.log(gltf);
 
-    lotterySample.children[0].material = transparentMat;
+    // lotterySample.children[0].material = transparentMat;
+    lotterySample.children[0].material = glassMat;
     lotterySample.children[9].material = glassMat;
 
     lotterySample.children[1].material = ballMatGreen;
@@ -470,7 +468,7 @@ function init() {
       firework.position.set(0, 150, 0);
       firework.scale.set(10, 10, 10);
 
-      scene.add(firework);
+      // scene.add(firework);
 
       // 폭죽 애니메이션
       const fireAnimations = gltf.animations;
