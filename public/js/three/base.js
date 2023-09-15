@@ -9,12 +9,12 @@ import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 // 이펙트
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-// import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { BloomPass } from "three/addons/postprocessing/BloomPass.js";
 // import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
 // import { FocusShader } from "three/addons/shaders/FocusShader.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-// import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
 // import { LuminosityShader } from "three/addons/shaders/LuminosityShader.js";
 // import { SobelOperatorShader } from "three/addons/shaders/SobelOperatorShader.js";
@@ -109,7 +109,7 @@ function init() {
   console.log("init function start");
 
   scene = new THREE.Scene();
-  // scene.background = new THREE.Color(0xebebeb);
+  // scene.background = new THREE.Color(0xebebeb); // 씬 컬러
 
   // camera = new THREE.PerspectiveCamera(
   //   40,
@@ -151,6 +151,21 @@ function init() {
   controls.maxPolarAngle = Math.PI / 2;
   controls.maxAzimuthAngle = Math.PI / 2;
   // controls.enableRotate = false;
+
+  // 씬 우주 배경
+  // const hdrPath = "../../../static/texture/MR_INT-005_WhiteNeons_NAD.hdr";
+  // const hdrPath = "../../../static/texture/MR_INT-001_NaturalStudio_NAD.hdr";
+  // const hdrPath = "../../../static/texture/Window_Lighting_01.jpeg";
+  // const hdrPath = "../../../static/background/space-1.hdr";
+  // const hdrPath = "../../../static/background/milky-way-1.hdr";
+  // const hdrPath = "../../../static/background/night-city-2.hdr";
+  // const hdrPath = "../../../static/background/green-galaxy-1.hdr";
+  const hdrPath = "../../../static/background/space-green-1.hdr";
+
+  rgbeLoader.load(hdrPath, function (texture) {
+    scene.background = texture;
+    // scene.environment = texture;
+  });
 
   // 빛 추가
   scene.add(
@@ -251,21 +266,6 @@ function init() {
   scene.add(testSphere);
 
   // window.addEventListener( 'resize', onWindowResize );
-
-  // 전체 배경
-  // const hdrPath = "../../../static/texture/MR_INT-005_WhiteNeons_NAD.hdr";
-  // const hdrPath = "../../../static/texture/MR_INT-001_NaturalStudio_NAD.hdr";
-  // const hdrPath = "../../../static/texture/Window_Lighting_01.jpeg";
-  // const hdrPath = "../../../static/background/space-1.hdr";
-  // const hdrPath = "../../../static/background/milky-way-1.hdr";
-  // const hdrPath = "../../../static/background/night-city-2.hdr";
-  const hdrPath = "../../../static/background/green-galaxy-1.hdr";
-  // const hdrPath = "../../../static/background/space-green-1.hdr";
-
-  rgbeLoader.load(hdrPath, function (texture) {
-    scene.background = texture;
-    // scene.environment = texture;
-  });
 
   // 무대
   // const stagePath =  "./static/model/stage/stage-retouch-1.gltf";
