@@ -363,7 +363,7 @@ function init() {
     lotterySample.children[28].material = ballMatBlue;
     // lotterySample.children[29].material = ballMatBlue;
 
-    lotterySample.position.set(0, 60, 0);
+    lotterySample.position.set(0, 30, 0);
     lotterySample.scale.set(40, 40, 40);
     scene.add(lotterySample);
 
@@ -381,8 +381,9 @@ function init() {
   });
 
   // 마법진?
-  const ringPath = "./static/model/magic_ring_green/scene.gltf";
+  // const ringPath = "./static/model/magic_ring_green/scene.gltf";
   // const ringPath = "./static/model/magic_ring_yingyangblue/scene.gltf";
+  const ringPath = "./static/model/magic_ring_green-1/ring-1.gltf";
   loader.load(ringPath, function (gltf) {
     ring = gltf.scene;
 
@@ -391,7 +392,7 @@ function init() {
     ring.position.set(0, -130, 0);
     ring.scale.set(30, 30, 30);
 
-    scene.add(ring);
+    // scene.add(ring);
 
     const animations = gltf.animations;
     ringMixer = new THREE.AnimationMixer(ring);
