@@ -53,7 +53,6 @@ const glassMat = new THREE.MeshPhysicalMaterial({
   opacity: 1,
   side: THREE.BackSide,
   transparent: true,
-  exposure: 1,
 });
 const transparentMat = new THREE.MeshBasicMaterial({
   transparent: true,

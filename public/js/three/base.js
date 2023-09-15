@@ -9,15 +9,15 @@ import { OBJLoader } from "three/addons/loaders/OBJLoader.js";
 // 이펙트
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
-// import { BloomPass } from "three/addons/postprocessing/BloomPass.js";
+// import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
+import { BloomPass } from "three/addons/postprocessing/BloomPass.js";
 // import { FilmPass } from "three/addons/postprocessing/FilmPass.js";
 // import { FocusShader } from "three/addons/shaders/FocusShader.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 // import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 
-import { LuminosityShader } from "three/addons/shaders/LuminosityShader.js";
-import { SobelOperatorShader } from "three/addons/shaders/SobelOperatorShader.js";
+// import { LuminosityShader } from "three/addons/shaders/LuminosityShader.js";
+// import { SobelOperatorShader } from "three/addons/shaders/SobelOperatorShader.js";
 
 // threejs 인스턴스
 // import { gridHelper, axesHelper } from "./helper/helper.js";
@@ -122,17 +122,22 @@ function init() {
   camera = new THREE.OrthographicCamera(
     window.innerWidth / -2,
     window.innerWidth / 2,
-    (window.innerHeight * 0.7) / 2,
-    (window.innerHeight * 0.7) / -2,
-    -200,
-    700 // 카메라 거리
+    window.innerHeight / 2,
+    window.innerHeight / -2,
+    -600,
+    500 // 카메라 거리
   );
   camera.position.set(0, 55, 120);
   camera.lookAt(0, 0, 0);
 
-  renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer = new THREE.WebGLRenderer({
+    antialias: true,
+    alpha: false,
+    preserveDrawingBuffer: false,
+    logarithmicDepthBuffer: true,
+  });
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(window.innerWidth, window.innerHeight * 0.7); // 캔버스 사이즈
+  renderer.setSize(window.innerWidth, window.innerHeight); // 캔버스 사이즈
   renderer.toneMapping = THREE.ReinhardToneMapping;
   // renderer.toneMapping = THREE.ACESFilmicToneMapping;
   // renderer.toneMapping = THREE.CineonToneMapping;
@@ -162,43 +167,51 @@ function init() {
 
   // 안개 추가
   // Create a fog with the desired color and initial density
-  const fogColor = 0x000104;
-  const fogDensity = 0.003;
-  const fog = new THREE.FogExp2(fogColor, fogDensity);
+  // const fogColor = 0x000104;
+  // const fogDensity = 0.003;
+  // const fog = new THREE.FogExp2(fogColor, fogDensity);
 
   // Assign the fog to the scene
-  scene.fog = fog;
+  // scene.fog = fog;
 
-  // 블룸효과
-  const renderScene = new RenderPass(scene, camera);
+  // 보정
+  const target = new THREE.WebGLRenderTarget(
+    window.innerWidth,
+    window.innerHeight,
+    {
+      type: THREE.HalfFloatType,
+      format: THREE.RGBAFormat,
+      // encoding:THREE.sRGBEncoding
+    }
+  );
+  target.samples = 8;
+
+  composer = new EffectComposer(renderer, target);
+
+  const renderPass = new RenderPass(scene, camera);
+  renderPass.clear = false;
+  renderPass.mask = 0x0001;
+
   const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
     1.5,
     0.4,
     0.85
   );
-  bloomPass.threshold = 0;
-  bloomPass.strength = 1;
-  bloomPass.radius = 1;
+  bloomPass.renderToScreen = true;
+  // bloomPass.threshold = 0;
+  // bloomPass.strength = 1;
+  // bloomPass.radius = 1;
   // const bloomPass = new BloomPass(0.75);
 
-  // const outputPass = new OutputPass();
-
-  // 보정
-  composer = new EffectComposer(renderer);
-
-  const shader = new ShaderPass(LuminosityShader);
-
-  composer.addPass(renderScene);
+  composer.addPass(renderPass);
   composer.addPass(bloomPass);
+
+  // composer 내용
   console.log("composer");
   console.log(composer);
-  console.log(renderScene);
   console.log(bloomPass);
-  // console.log(outputPass);
-  console.log(shader);
 
-  // composer.addPass(outputPass);
   // composer.setSize(window.innerWidth, window.innerHeight * 0.7);
 
   // 테스트 알
@@ -212,7 +225,7 @@ function init() {
   // });
 
   // 테스트 박스
-  const meshGeometry = new THREE.BoxGeometry(200, 250, 100);
+  const meshGeometry = new THREE.BoxGeometry(100, 100, 100);
   // const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
   const meshMaterial = new THREE.MeshLambertMaterial({
     color: 0xffffff,
@@ -220,16 +233,22 @@ function init() {
     side: THREE.DoubleSide,
     transparent: true,
   });
+  const meshMaterialRed = new THREE.MeshStandardMaterial({
+    color: 0xffffed,
+    toneMapped: false,
+    emissive: "red",
+    emissiveIntensity: 10,
+  });
 
-  mesh = new THREE.Mesh(meshGeometry, meshMaterial);
-  mesh.position.set(0, 0, -130);
-  // scene.add(mesh);
+  mesh = new THREE.Mesh(meshGeometry, meshMaterialRed);
+  mesh.position.set(250, 50, 0);
+  scene.add(mesh);
 
   // 테스트 스피어
   const sphereGeometry = new THREE.SphereGeometry(90, 32, 32);
   const testSphere = new THREE.Mesh(sphereGeometry, glassMat);
   testSphere.position.set(-300, 0, 0); // x: -180
-  // scene.add(testSphere);
+  scene.add(testSphere);
 
   // window.addEventListener( 'resize', onWindowResize );
 
@@ -237,10 +256,10 @@ function init() {
   // const hdrPath = "../../../static/texture/MR_INT-005_WhiteNeons_NAD.hdr";
   // const hdrPath = "../../../static/texture/MR_INT-001_NaturalStudio_NAD.hdr";
   // const hdrPath = "../../../static/texture/Window_Lighting_01.jpeg";
-  const hdrPath = "../../../static/background/space-1.hdr";
+  // const hdrPath = "../../../static/background/space-1.hdr";
   // const hdrPath = "../../../static/background/milky-way-1.hdr";
   // const hdrPath = "../../../static/background/night-city-2.hdr";
-  // const hdrPath = "../../../static/background/green-galaxy-1.hdr";
+  const hdrPath = "../../../static/background/green-galaxy-1.hdr";
   // const hdrPath = "../../../static/background/space-green-1.hdr";
 
   rgbeLoader.load(hdrPath, function (texture) {
@@ -311,17 +330,17 @@ function init() {
     console.log("lottery machine sample");
     console.log(gltf);
 
-    lotterySample.children[2].material = transparentMat;
-    lotterySample.children[11].material = glassMat;
+    lotterySample.children[0].material = transparentMat;
+    lotterySample.children[9].material = transparentMat;
 
+    lotterySample.children[2].material = ballMatGreen;
     lotterySample.children[3].material = ballMatGreen;
-    // lotterySample.children[3].material = ballMatGreen;
     lotterySample.children[4].material = ballMatRed;
     lotterySample.children[5].material = ballMatBlue;
     lotterySample.children[6].material = ballMatBlue;
     lotterySample.children[7].material = ballMatBlue;
     lotterySample.children[8].material = ballMatYellow;
-    lotterySample.children[9].material = ballMatBlue;
+    // lotterySample.children[9].material = ballMatBlue;
     lotterySample.children[10].material = ballMatYellow;
     // lotterySample.children[11].material = ballMatYellow;
     lotterySample.children[12].material = ballMatYellow;
