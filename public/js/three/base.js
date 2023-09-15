@@ -142,6 +142,7 @@ function init() {
   // renderer.toneMapping = THREE.ACESFilmicToneMapping;
   // renderer.toneMapping = THREE.CineonToneMapping;
   renderer.toneMappingExposure = 1;
+  // renderer.clear(false, true, false);
   console.log("renderer");
   console.log(renderer);
 
@@ -216,7 +217,7 @@ function init() {
     threshold: 0,
     strength: 0.15,
     radius: 0.5,
-    exposure: 1,
+    exposure: 0.5,
     scene: "SCENE WITH GLOW",
   };
   const bloomPass = new UnrealBloomPass(
@@ -273,10 +274,11 @@ function init() {
   composer = new EffectComposer(renderer);
   composer.addPass(renderPass);
   composer.addPass(bloomPass);
-  // composer.addPass(outputPass);
+  composer.addPass(outputPass);
 
   console.log("composer");
   console.log(composer);
+  console.log(renderPass);
   console.log(bloomPass);
   console.log(outputPass);
 
@@ -376,7 +378,7 @@ function init() {
   // 샘플 로터리 머신
   // const lotterySamplePath = "./static/model/simulation/emitter-final-3.gltf";
   const lotterySamplePath =
-    "./static/model/lottery-machine-remake/tester-3/lottery-machine-wind-4.gltf";
+    "./static/model/lottery-machine-remake/tester-3/lottery-machine-wind-5.gltf";
   loader.load(lotterySamplePath, function (gltf) {
     lotterySample = gltf.scene;
 
@@ -385,7 +387,7 @@ function init() {
 
     // lotterySample.children[0].material = transparentMat;
     lotterySample.children[0].material = glassMat;
-    lotterySample.children[9].material = glassMat;
+    // lotterySample.children[9].material = glassMat;
 
     lotterySample.children[1].material = ballMatGreen;
     lotterySample.children[2].material = ballMatGreen;

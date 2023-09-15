@@ -44,7 +44,6 @@ const ballMatRed = new THREE.MeshStandardMaterial({
   color: 0xffffed,
   toneMapped: false,
   metalness: 1,
-  clearcoat: 1,
   emissive: "red",
   emissiveIntensity: 50,
 });
