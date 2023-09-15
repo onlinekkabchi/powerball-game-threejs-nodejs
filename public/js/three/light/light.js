@@ -36,7 +36,7 @@ const light = {
 const ambientLight = new THREE.AmbientLight(light.directional);
 ambientLight.position.set(0, 200, 0);
 ambientLight.scale.set(100, 50, 100);
-ambientLight.intensity = 10;
+ambientLight.intensity = 0.03;
 
 // 전체 광
 const dirLight = new THREE.DirectionalLight(light.directional);
@@ -54,7 +54,7 @@ const hemiLight = new THREE.HemisphereLight(
 );
 hemiLight.position.set(0, 50, 0);
 hemiLight.scale.set(100, 50, 100);
-hemiLight.intensity = 40;
+hemiLight.intensity = 0.03;
 
 const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 3);
 
