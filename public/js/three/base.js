@@ -141,6 +141,9 @@ function init() {
   renderer.toneMapping = THREE.ReinhardToneMapping;
   // renderer.toneMapping = THREE.ACESFilmicToneMapping;
   // renderer.toneMapping = THREE.CineonToneMapping;
+  renderer.toneMappingExposure = 1;
+  console.log("renderer");
+  console.log(renderer);
 
   document.body.appendChild(renderer.domElement);
 
@@ -201,11 +204,23 @@ function init() {
   );
   target.samples = 8;
 
-  composer = new EffectComposer(renderer, target);
-
   const renderPass = new RenderPass(scene, camera);
   renderPass.clear = false;
   renderPass.mask = 0x0001;
+
+  const BLOOM_SCENE = 1;
+  const bloomLayer = new THREE.Layers();
+  bloomLayer.set(BLOOM_SCENE);
+
+  const bloomParams = {
+    threshold: 0,
+    strength: 1,
+    radius: 0.5,
+    exposure: 1,
+    scene: "SCENE WITH GLOW",
+  };
+  const darkMaterial = new THREE.MeshBasicMaterial({ color: "black" });
+  const materials = {};
 
   const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
@@ -213,19 +228,60 @@ function init() {
     0.4,
     0.85
   );
-  bloomPass.renderToScreen = true;
-  // bloomPass.threshold = 0;
-  // bloomPass.strength = 1;
-  // bloomPass.radius = 1;
-  // const bloomPass = new BloomPass(0.75);
+  bloomPass.threshold = bloomParams.threshold;
+  bloomPass.strength = bloomParams.strength;
+  bloomPass.radius = bloomParams.radius;
 
-  composer.addPass(renderPass);
-  composer.addPass(bloomPass);
+  // const bloomComposer = new EffectComposer(renderer);
+  // bloomComposer.renderToScreen = false;
+  // bloomComposer.addPass(renderPass);
+  // bloomComposer.addPass(bloomPass);
+
+  // const shaderPass = new ShaderPass(
+  //   new THREE.ShaderMaterial({
+  //     uniforms: {
+  //       baseTexture: { value: null },
+  //       bloomTexture: { value: bloomComposer.renderTarget2.texture },
+  //     },
+  //     vertexShader: `
+  //   varying vec2 vUv;
+
+  //   void main() {
+
+  //       vUv = uv;
+
+  //       gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+  //   }`,
+  //     fragmentShader: `
+  //   uniform sampler2D baseTexture;
+  //   uniform sampler2D bloomTexture;
+
+  //   varying vec2 vUv;
+
+  //   void main() {
+
+  //     gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );
+
+  //   }
+  //   `,
+  //     defines: {},
+  //   }),
+  //   "baseTexture"
+  // );
+  // shaderPass.needsSwap = true;
+
+  const outputPass = new OutputPass();
 
   // composer 내용
+  composer = new EffectComposer(renderer);
+  composer.addPass(renderPass);
+  composer.addPass(bloomPass);
+  composer.addPass(outputPass);
+
   console.log("composer");
   console.log(composer);
   console.log(bloomPass);
+  console.log(outputPass);
 
   // composer.setSize(window.innerWidth, window.innerHeight * 0.7);
 
@@ -492,7 +548,7 @@ function animate() {
   }
 
   composer.render();
-  render();
+  // render();
 }
 
 function render() {
