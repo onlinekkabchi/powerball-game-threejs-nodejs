@@ -331,8 +331,9 @@ function init() {
     console.log(gltf);
 
     lotterySample.children[0].material = transparentMat;
-    lotterySample.children[9].material = transparentMat;
+    lotterySample.children[9].material = glassMat;
 
+    lotterySample.children[1].material = ballMatGreen;
     lotterySample.children[2].material = ballMatGreen;
     lotterySample.children[3].material = ballMatGreen;
     lotterySample.children[4].material = ballMatRed;
@@ -342,7 +343,7 @@ function init() {
     lotterySample.children[8].material = ballMatYellow;
     // lotterySample.children[9].material = ballMatBlue;
     lotterySample.children[10].material = ballMatYellow;
-    // lotterySample.children[11].material = ballMatYellow;
+    lotterySample.children[11].material = ballMatYellow;
     lotterySample.children[12].material = ballMatYellow;
     lotterySample.children[13].material = ballMatYellow;
     lotterySample.children[14].material = ballMatGreen;
@@ -360,7 +361,7 @@ function init() {
     lotterySample.children[26].material = ballMatBlue;
     lotterySample.children[27].material = ballMatBlue;
     lotterySample.children[28].material = ballMatBlue;
-    lotterySample.children[29].material = ballMatBlue;
+    // lotterySample.children[29].material = ballMatBlue;
 
     lotterySample.position.set(0, 60, 0);
     lotterySample.scale.set(40, 40, 40);
