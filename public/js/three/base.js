@@ -420,7 +420,7 @@ function init() {
   loader.load(logoPath, function (gltf) {
     updownLogo = gltf.scene;
 
-    updownLogo.position.set(0, 200, 0);
+    updownLogo.position.set(-30, 180, 0);
     updownLogo.scale.set(50, 50, 50);
 
     scene.add(updownLogo);
@@ -490,7 +490,7 @@ function init() {
 function animate() {
   requestAnimationFrame(animate);
 
-  updownLogo.rotation.y -= 0.005;
+  // updownLogo.rotation.y -= 0.005;
   // mesh.rotation.y += 0.05;
 
   let mixerUpdateDelta = clock.getDelta();
