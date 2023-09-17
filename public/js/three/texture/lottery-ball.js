@@ -1,19 +1,12 @@
 import * as THREE from "three";
 
-const params = {
-  exposure: 1.05,
-  bloomStrength: 1.5,
-  bloomThreshold: 0.5,
-  bloomRadius: 0,
-};
-
 const ballMatGreen = new THREE.MeshPhysicalMaterial({
   color: 0x006b3d,
   metalness: 0.9,
   roughness: 0.1,
   // clearcoat: 1,
-  emissive: 0xffffff,
-  emissiveIntensity: 1,
+  // emissive: 0xffffff,
+  // emissiveIntensity: 1,
 });
 
 const ballMatYellow = new THREE.MeshPhysicalMaterial({
@@ -21,8 +14,8 @@ const ballMatYellow = new THREE.MeshPhysicalMaterial({
   metalness: 0.9,
   roughness: 0.1,
   // clearcoat: 1,
-  emissive: 0xffffff,
-  emissiveIntensity: 1,
+  // emissive: 0xffffff,
+  // emissiveIntensity: 1,
 });
 const ballMatBlue = new THREE.MeshPhysicalMaterial({
   color: 0x000083,
@@ -32,21 +25,21 @@ const ballMatBlue = new THREE.MeshPhysicalMaterial({
   emissive: "blue",
   emissiveIntensity: 1,
 });
-// const ballMatRed = new THREE.MeshPhysicalMaterial({
-//   color: 0xa11c0f,
-//   metalness: 0.9,
-//   roughness: 0.1,
-//   // clearcoat: 1,
+const ballMatRed = new THREE.MeshPhysicalMaterial({
+  color: 0xa11c0f,
+  metalness: 0.9,
+  roughness: 0.1,
+  clearcoat: 1,
+  emissive: "red",
+  emissiveIntensity: 1,
+});
+// const ballMatRed = new THREE.MeshStandardMaterial({
+// color: 0xffffed,
+// toneMapped: false,
+// metalness: 1,
 //   emissive: "red",
 //   emissiveIntensity: 1,
 // });
-const ballMatRed = new THREE.MeshStandardMaterial({
-  color: 0xffffed,
-  toneMapped: false,
-  metalness: 1,
-  emissive: "red",
-  emissiveIntensity: 50,
-});
 
 const glowBallMat = null;
 

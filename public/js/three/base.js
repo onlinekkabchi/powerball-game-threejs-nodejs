@@ -95,7 +95,11 @@ let group, camera, scene, renderer;
 let isRingAnimationPlaying = false;
 let animations;
 
-let composer;
+let composer, bloomComposer;
+
+const BLOOM_SCENE = 1;
+const bloomLayer = new THREE.Layers();
+bloomLayer.set(BLOOM_SCENE);
 
 let ballController = {
   up: true,
@@ -125,7 +129,7 @@ function init() {
     window.innerHeight / 2,
     window.innerHeight / -2,
     -600,
-    1000 // 카메라 거리
+    400 // 카메라 거리
   );
   camera.position.set(0, 55, 120);
   camera.lookAt(0, 0, 0);
@@ -163,8 +167,8 @@ function init() {
   // const hdrPath = "../../../static/background/space-1.hdr";
   // const hdrPath = "../../../static/background/milky-way-1.hdr";
   // const hdrPath = "../../../static/background/night-city-2.hdr";
-  // const hdrPath = "../../../static/background/green-galaxy-1.hdr";
-  const hdrPath = "../../../static/background/space-green-1.hdr";
+  const hdrPath = "../../../static/background/green-galaxy-1.hdr";
+  // const hdrPath = "../../../static/background/space-green-1.hdr";
 
   rgbeLoader.load(hdrPath, function (texture) {
     scene.background = texture;
@@ -194,24 +198,20 @@ function init() {
   scene.fog = fog;
 
   // 보정
-  const target = new THREE.WebGLRenderTarget(
-    window.innerWidth,
-    window.innerHeight,
-    {
-      type: THREE.HalfFloatType,
-      format: THREE.RGBAFormat,
-      // encoding:THREE.sRGBEncoding
-    }
-  );
-  target.samples = 8;
+  // const target = new THREE.WebGLRenderTarget(
+  //   window.innerWidth,
+  //   window.innerHeight,
+  //   {
+  //     type: THREE.HalfFloatType,
+  //     format: THREE.RGBAFormat,
+  //     // encoding:THREE.sRGBEncoding
+  //   }
+  // );
+  // target.samples = 8;
 
   const renderPass = new RenderPass(scene, camera);
   renderPass.clear = false;
   renderPass.mask = 0x0001;
-
-  const BLOOM_SCENE = 1;
-  const bloomLayer = new THREE.Layers();
-  bloomLayer.set(BLOOM_SCENE);
 
   const bloomParams = {
     threshold: 0,
@@ -229,58 +229,28 @@ function init() {
   bloomPass.threshold = bloomParams.threshold;
   bloomPass.strength = bloomParams.strength;
   bloomPass.radius = bloomParams.radius;
-
-  // const bloomComposer = new EffectComposer(renderer);
-  // bloomComposer.renderToScreen = false;
-  // bloomComposer.addPass(renderPass);
-  // bloomComposer.addPass(bloomPass);
-
-  // const shaderPass = new ShaderPass(
-  //   new THREE.ShaderMaterial({
-  //     uniforms: {
-  //       baseTexture: { value: null },
-  //       bloomTexture: { value: bloomComposer.renderTarget2.texture },
-  //     },
-  //     vertexShader: `
-  //   varying vec2 vUv;
-
-  //   void main() {
-
-  //       vUv = uv;
-
-  //       gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-  //   }`,
-  //     fragmentShader: `
-  //   uniform sampler2D baseTexture;
-  //   uniform sampler2D bloomTexture;
-
-  //   varying vec2 vUv;
-
-  //   void main() {
-
-  //     gl_FragColor = ( texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );
-
-  //   }
-  //   `,
-  //     defines: {},
-  //   }),
-  //   "baseTexture"
-  // );
-  // shaderPass.needsSwap = true;
+  bloomPass.selectedLayer = BLOOM_SCENE;
 
   const outputPass = new OutputPass();
 
+  // 발광
+  // bloomComposer = new EffectComposer(renderer);
+  // bloomComposer.renderToScreen = true;
+  // bloomComposer.addPass(renderPass);
+  // bloomComposer.addPass(bloomPass);
+
   // composer 내용
   composer = new EffectComposer(renderer);
-  composer.addPass(renderPass);
-  composer.addPass(bloomPass);
-  composer.addPass(outputPass);
+  // composer.renderToScreen = true;
+  // composer.addPass(renderPass);
+  // composer.addPass(bloomPass);
+  // composer.addPass(outputPass);
 
   console.log("composer");
   console.log(composer);
   console.log(renderPass);
   console.log(bloomPass);
-  console.log(outputPass);
+  // console.log(outputPass);
 
   // composer.setSize(window.innerWidth, window.innerHeight * 0.7);
 
@@ -298,16 +268,16 @@ function init() {
   const meshGeometry = new THREE.BoxGeometry(100, 100, 100);
   // const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
   const meshMaterial = new THREE.MeshLambertMaterial({
-    color: 0xffffff,
+    color: 0xebebeb,
     opacity: 1,
     side: THREE.DoubleSide,
     transparent: true,
   });
   const meshMaterialRed = new THREE.MeshStandardMaterial({
-    color: 0xffffed,
-    toneMapped: false,
-    emissive: "red",
-    emissiveIntensity: 10,
+    color: 0xebebeb,
+    toneMapped: true,
+    // emissive: "red",
+    // emissiveIntensity: 10,
   });
 
   mesh = new THREE.Mesh(meshGeometry, meshMaterialRed);
@@ -378,16 +348,16 @@ function init() {
   // 샘플 로터리 머신
   // const lotterySamplePath = "./static/model/simulation/emitter-final-3.gltf";
   const lotterySamplePath =
-    "./static/model/lottery-machine-remake/tester-3/lottery-machine-wind-5.gltf";
+    "./static/model/lottery-machine-remake/tester-3/lottery-machine-wind-4.gltf";
   loader.load(lotterySamplePath, function (gltf) {
     lotterySample = gltf.scene;
 
     console.log("lottery machine sample");
     console.log(gltf);
 
-    // lotterySample.children[0].material = transparentMat;
-    lotterySample.children[0].material = glassMat;
-    // lotterySample.children[9].material = glassMat;
+    lotterySample.children[0].material = transparentMat;
+    // lotterySample.children[0].material = glassMat;
+    lotterySample.children[9].material = glassMat;
 
     lotterySample.children[1].material = ballMatGreen;
     lotterySample.children[2].material = ballMatGreen;
@@ -467,10 +437,10 @@ function init() {
 
       console.log("firework");
       console.log(gltf);
-      firework.position.set(0, 150, 0);
+      firework.position.set(0, 50, 0);
       firework.scale.set(10, 10, 10);
 
-      // scene.add(firework);
+      scene.add(firework);
 
       // 폭죽 애니메이션
       const fireAnimations = gltf.animations;
@@ -547,8 +517,10 @@ function animate() {
     lotteryMixer.update(mixerUpdateDelta);
   }
 
-  composer.render();
-  // render();
+  // camera.layers.set(BLOOM_SCENE);
+  // composer.render();
+  // bloomComposer.render();
+  render();
 }
 
 function render() {

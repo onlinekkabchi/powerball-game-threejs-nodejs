@@ -42,7 +42,7 @@ ambientLight.intensity = 10;
 const dirLight = new THREE.DirectionalLight(light.directional);
 dirLight.position.set(0, 250, 0);
 dirLight.scale.set(100, 50, 100);
-dirLight.intensity = 1;
+dirLight.intensity = 0.05;
 
 const dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 10);
 
@@ -54,7 +54,7 @@ const hemiLight = new THREE.HemisphereLight(
 );
 hemiLight.position.set(0, 50, 0);
 hemiLight.scale.set(100, 50, 100);
-hemiLight.intensity = 5;
+hemiLight.intensity = 10;
 
 const hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 3);
 
