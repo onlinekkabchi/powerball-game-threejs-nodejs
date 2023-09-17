@@ -7,10 +7,10 @@ const sphereMat = new THREE.MeshBasicMaterial({ color: 0x81007f }); // Lollipop
 const pointLight = new THREE.PointLight(0xffffff, 400);
 pointLight.add(new THREE.Mesh(sphere, sphereMat));
 const pointLightHelper = new THREE.PointLightHelper(pointLight, 20);
-pointLight.position.set(0, 300, 0);
+pointLight.position.set(0, 100, 0);
 pointLight.lookAt(0, 0, 0);
 pointLight.castShadow = true;
-pointLight.intensity = 100;
+pointLight.intensity = 1000;
 
 // 보라색
 const pointLight2 = new THREE.PointLight(0x81007f, 400);

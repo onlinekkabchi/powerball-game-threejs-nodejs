@@ -38,8 +38,9 @@ import {
   pointLightHelper2,
 } from "./light/light-point.js";
 
-// import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
-// import { pointLight, pointLightHelper } from "./light/light-point.js";
+import { RectAreaLightHelper } from "three/addons/helpers/RectAreaLightHelper.js";
+import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
+import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
 // import { bulbLight } from "./light/light-bulb.js";
 
 // // 모델
@@ -182,11 +183,21 @@ function init() {
     hemiLight
     // dirLightHelper, hemiLightHelper
   );
+  // scene.add(
+  //   pointLight,
+  //   pointLightHelper
+  // pointLight2, pointLightHelper2
+  // );
+
+  RectAreaLightUniformsLib.init();
   scene.add(
-    pointLight,
-    pointLightHelper
-    // pointLight2, pointLightHelper2
+    rectLight1
+    // rectLight2,
+    // rectLight3,
+    // new RectAreaLightHelper(rectLight1)
   );
+  console.log("rect light");
+  console.log(rectLight1, rectLight2, rectLight3);
 
   // 안개 추가
   // Create a fog with the desired color and initial density
