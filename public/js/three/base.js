@@ -442,18 +442,19 @@ function init() {
   );
 
   // 스톰트루퍼
+  const robotPath = "./static/model/dancing_robot/scene.gltf";
   const trupperPath = "./static/model/dancing_stormtrooper/scene.gltf";
   loader.load(
-    trupperPath,
+    robotPath,
     function (gltf) {
       trupper = gltf.scene;
 
       console.log("trupper");
       console.log(gltf);
       trupper.position.set(250, -100, 30);
-      trupper.scale.set(50, 50, 50);
+      trupper.scale.set(20, 20, 20);
 
-      // scene.add(trupper);
+      scene.add(trupper);
 
       const trupperAnimations = gltf.animations;
       trupperMixer = new THREE.AnimationMixer(trupper);
@@ -484,6 +485,7 @@ function animate() {
   // console.log(mixer);
 
   if (fireworkMixer) {
+    // firework.rotation.y += 0.01;
     fireworkMixer.update(mixerUpdateDelta);
   }
 
