@@ -10,10 +10,10 @@ const light = {
 const params = {
   width: 50,
   height: 50,
-  intensity: 200,
+  intensity: 10,
 };
 const rectLight1 = new THREE.RectAreaLight(
-  light.green,
+  light.white,
   params.intensity,
   params.width,
   params.height

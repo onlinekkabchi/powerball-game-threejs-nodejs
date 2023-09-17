@@ -102,7 +102,6 @@ let composer, bloomComposer;
 
 const BLOOM_SCENE = 1;
 const bloomLayer = new THREE.Layers();
-bloomLayer.set(BLOOM_SCENE);
 
 let ballController = {
   up: true,
@@ -192,15 +191,15 @@ function init() {
   // );
 
   // 사각 조명 추가
-  // RectAreaLightUniformsLib.init();
-  // scene.add(
-  //   rectLight1,
-  //   rectLight2,
-  //   rectLight3,
-  //   new RectAreaLightHelper(rectLight1),
-  //   new RectAreaLightHelper(rectLight2),
-  //   new RectAreaLightHelper(rectLight3)
-  // );
+  RectAreaLightUniformsLib.init();
+  scene.add(
+    rectLight1,
+    //   rectLight2,
+    //   rectLight3,
+    new RectAreaLightHelper(rectLight1)
+    //   new RectAreaLightHelper(rectLight2),
+    //   new RectAreaLightHelper(rectLight3)
+  );
 
   // scene.add(spotLight1, spotLightHelper1);
 
@@ -214,21 +213,10 @@ function init() {
   scene.fog = fog;
 
   // 보정
-  // const target = new THREE.WebGLRenderTarget(
-  //   window.innerWidth,
-  //   window.innerHeight,
-  //   {
-  //     type: THREE.HalfFloatType,
-  //     format: THREE.RGBAFormat,
-  //     // encoding:THREE.sRGBEncoding
-  //   }
-  // );
-  // target.samples = 8;
 
   const renderPass = new RenderPass(scene, camera);
-  renderPass.clear = false;
-  renderPass.mask = 0x0001;
 
+  bloomLayer.set(BLOOM_SCENE);
   const bloomParams = {
     threshold: 0,
     strength: 0.15,
@@ -249,18 +237,12 @@ function init() {
 
   const outputPass = new OutputPass();
 
-  // 발광
-  // bloomComposer = new EffectComposer(renderer);
-  // bloomComposer.renderToScreen = true;
-  // bloomComposer.addPass(renderPass);
-  // bloomComposer.addPass(bloomPass);
-
   // composer 내용
   composer = new EffectComposer(renderer);
-  // composer.renderToScreen = true;
-  // composer.addPass(renderPass);
-  // composer.addPass(bloomPass);
-  // composer.addPass(outputPass);
+  composer.renderToScreen = true;
+  composer.addPass(renderPass);
+  composer.addPass(bloomPass);
+  composer.addPass(outputPass);
 
   console.log("composer");
   console.log(composer);
@@ -283,12 +265,6 @@ function init() {
   // 테스트 박스
   const meshGeometry = new THREE.BoxGeometry(100, 100, 100);
   // const meshGeometry = new THREE.SphereGeometry(20, 32, 16);
-  const meshMaterial = new THREE.MeshLambertMaterial({
-    color: 0xebebeb,
-    opacity: 1,
-    side: THREE.DoubleSide,
-    transparent: true,
-  });
   const meshMaterialRed = new THREE.MeshStandardMaterial({
     color: 0xebebeb,
     toneMapped: true,
@@ -298,13 +274,13 @@ function init() {
 
   mesh = new THREE.Mesh(meshGeometry, meshMaterialRed);
   mesh.position.set(250, 50, 0);
-  scene.add(mesh);
+  // scene.add(mesh);
 
   // 테스트 스피어
   const sphereGeometry = new THREE.SphereGeometry(90, 32, 32);
   const testSphere = new THREE.Mesh(sphereGeometry, glassMat);
   testSphere.position.set(-300, 0, 0); // x: -180
-  scene.add(testSphere);
+  // scene.add(testSphere);
 
   // window.addEventListener( 'resize', onWindowResize );
 
@@ -534,9 +510,9 @@ function animate() {
   }
 
   // camera.layers.set(BLOOM_SCENE);
-  // composer.render();
+  composer.render();
   // bloomComposer.render();
-  render();
+  // render();
 }
 
 function render() {
