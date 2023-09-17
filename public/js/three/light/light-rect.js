@@ -9,8 +9,8 @@ const light = {
 };
 const params = {
   width: 50,
-  height: 100,
-  intensity: 120,
+  height: 50,
+  intensity: 200,
 };
 const rectLight1 = new THREE.RectAreaLight(
   light.green,
@@ -18,16 +18,16 @@ const rectLight1 = new THREE.RectAreaLight(
   params.width,
   params.height
 );
-rectLight1.position.set(-100, 80, -10);
+rectLight1.position.set(0, 150, 0);
 rectLight1.lookAt(30, 0, 0);
 
 const rectLight2 = new THREE.RectAreaLight(
-  light.green,
+  light.blue,
   params.intensity,
   params.width,
   params.height
 );
-rectLight2.position.set(0, 200, 5);
+rectLight2.position.set(100, 150, 0);
 rectLight2.lookAt(30, 0, 0);
 
 const rectLight3 = new THREE.RectAreaLight(light.blue, 50, 40, 10);

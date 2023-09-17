@@ -43,6 +43,8 @@ import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUnifo
 import { rectLight1, rectLight2, rectLight3 } from "./light/light-rect.js";
 // import { bulbLight } from "./light/light-bulb.js";
 
+import { spotLight1, spotLightHelper1 } from "./light/light-spot.js";
+
 // // 모델
 // import { cube1, cube2 } from "./models/cube.js";
 // import { stage, stageBaked } from "./models/stage.js";
@@ -193,10 +195,14 @@ function init() {
   RectAreaLightUniformsLib.init();
   scene.add(
     rectLight1,
-    //   rectLight2
-    // rectLight3,
-    new RectAreaLightHelper(rectLight1)
+    rectLight2,
+    rectLight3,
+    new RectAreaLightHelper(rectLight1),
+    new RectAreaLightHelper(rectLight2),
+    new RectAreaLightHelper(rectLight3)
   );
+
+  // scene.add(spotLight1, spotLightHelper1);
 
   // 안개 추가
   // Create a fog with the desired color and initial density
