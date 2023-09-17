@@ -87,7 +87,8 @@ let firework,
   trupperAction,
   particle,
   particleMixer,
-  particleAction;
+  particleAction,
+  updownLogo;
 // let fireworkMixer, ringMixer, lotteryMixer, trupperMixer;
 let lotterySample,
   lotterySampleMixer,
@@ -389,28 +390,40 @@ function init() {
 
     // // Play all animation actions simultaneously
     lotterySampleAction.forEach((action) => action.play());
+
+    animate();
   });
 
   // 마법진?
   // const ringPath = "./static/model/magic_ring_green/scene.gltf";
   // const ringPath = "./static/model/magic_ring_yingyangblue/scene.gltf";
-  const ringPath = "./static/model/magic_ring_green-1/ring-1.gltf";
-  loader.load(ringPath, function (gltf) {
-    ring = gltf.scene;
+  // const ringPath = "./static/model/magic_ring_green-1/ring-1.gltf";
+  // loader.load(ringPath, function (gltf) {
+  //   ring = gltf.scene;
 
-    console.log("ring");
-    console.log(gltf);
-    ring.position.set(0, -130, 0);
-    ring.scale.set(30, 30, 30);
+  //   console.log("ring");
+  //   console.log(gltf);
+  //   ring.position.set(0, -130, 0);
+  //   ring.scale.set(30, 30, 30);
 
-    // scene.add(ring);
+  //   // scene.add(ring);
 
-    const animations = gltf.animations;
-    ringMixer = new THREE.AnimationMixer(ring);
-    ringAction = ringMixer.clipAction(animations[0]).play();
-    // console.log(ringMixer.clipAction(animations[0]));
+  //   const animations = gltf.animations;
+  //   ringMixer = new THREE.AnimationMixer(ring);
+  //   ringAction = ringMixer.clipAction(animations[0]).play();
+  //   // console.log(ringMixer.clipAction(animations[0]));
 
-    animate();
+  // });
+
+  // 업다운 로고
+  const logoPath = "./static/model/updwon-logo/updown-logo-2.gltf";
+  loader.load(logoPath, function (gltf) {
+    updownLogo = gltf.scene;
+
+    updownLogo.position.set(0, 200, 0);
+    updownLogo.scale.set(50, 50, 50);
+
+    scene.add(updownLogo);
   });
 
   // 폭죽
@@ -477,7 +490,7 @@ function init() {
 function animate() {
   requestAnimationFrame(animate);
 
-  // mesh.rotation.x += 0.05;
+  updownLogo.rotation.y -= 0.005;
   // mesh.rotation.y += 0.05;
 
   let mixerUpdateDelta = clock.getDelta();
