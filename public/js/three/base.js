@@ -131,9 +131,9 @@ function init() {
     window.innerHeight / 2,
     window.innerHeight / -2,
     -600,
-    400 // 카메라 거리
+    500 // 카메라 거리
   );
-  camera.position.set(0, 55, 120);
+  camera.position.set(0, 80, 150);
   camera.lookAt(0, 0, 0);
 
   renderer = new THREE.WebGLRenderer({
@@ -162,15 +162,8 @@ function init() {
   controls.maxAzimuthAngle = Math.PI / 2;
   // controls.enableRotate = false;
 
-  // 씬 우주 배경
-  // const hdrPath = "../../../static/texture/MR_INT-005_WhiteNeons_NAD.hdr";
-  // const hdrPath = "../../../static/texture/MR_INT-001_NaturalStudio_NAD.hdr";
-  // const hdrPath = "../../../static/texture/Window_Lighting_01.jpeg";
-  // const hdrPath = "../../../static/background/space-1.hdr";
-  // const hdrPath = "../../../static/background/milky-way-1.hdr";
-  // const hdrPath = "../../../static/background/night-city-2.hdr";
-  const hdrPath = "../../../static/background/green-galaxy-1.hdr";
-  // const hdrPath = "../../../static/background/space-green-1.hdr";
+  // 전체 배경
+  const hdrPath = "./static/background/night/night_free_Env.hdr";
 
   rgbeLoader.load(hdrPath, function (texture) {
     scene.background = texture;
@@ -292,7 +285,7 @@ function init() {
     function (gltf) {
       const model = gltf.scene;
       model.position.set(0, -130, 20);
-      model.scale.set(40, 40, 40); // orthographic 카메라 사용할때 크기 주의할것
+      model.scale.set(35, 35, 35); // orthographic 카메라 사용할때 크기 주의할것
       scene.add(model);
 
       model.children.forEach((el) => (el.material = ballMatBlue));
@@ -321,7 +314,7 @@ function init() {
     lottery.children[4].material = glassMat;
 
     lottery.position.set(300, -350, 0);
-    lottery.scale.set(1100, 1100, 1100);
+    lottery.scale.set(800, 800, 800);
 
     // scene.add(lottery);
 
