@@ -43,32 +43,41 @@ const pballMatRed = new THREE.MeshPhysicalMaterial({
 
 const ballMatGreen = new THREE.MeshPhysicalMaterial({
   color: 0x29af34,
-  metalness: 0.9,
+  // color: 0x013220,
+  metalness: 0.7,
   roughness: 0.5,
-  // normalMap: texture,
+  clearcoat: 1,
   toneMapped: true,
-  emissive: "green",
+  emissive: "blue",
   emissiveIntensity: 1,
 });
 const ballMatYellow = new THREE.MeshStandardMaterial({
   color: 0xfebe00,
-  // toneMapped: true,
-  // emissive: "red",
-  // emissiveIntensity: 10,
+  metalness: 0.9,
+  roughness: 0.5,
+  clearcoat: 1,
+  toneMapped: true,
+  emissive: "green",
+  emissiveIntensity: 1,
 });
 const ballMatRed = new THREE.MeshPhysicalMaterial({
   color: 0x8e0500,
   // toneMapped: true,
-  metalness: 1,
+  metalness: 0.9,
+  roughness: 0.5,
   clearcoat: 1,
-  emissive: "red",
-  emissiveIntensity: 1,
+  toneMapped: true,
+  emissive: "yellow",
+  emissiveIntensity: 10,
 });
 const ballMatBlue = new THREE.MeshStandardMaterial({
   color: 0x2347bd,
+  metalness: 0.9,
+  roughness: 0.5,
+  clearcoat: 1,
   toneMapped: true,
-  // emissive: "red",
-  // emissiveIntensity: 10,
+  emissive: "red",
+  emissiveIntensity: 1,
 });
 
 export { ballMatGreen, ballMatYellow, ballMatBlue, ballMatRed };

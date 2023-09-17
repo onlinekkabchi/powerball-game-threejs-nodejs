@@ -18,7 +18,7 @@ const rectLight1 = new THREE.RectAreaLight(
   params.width,
   params.height
 );
-rectLight1.position.set(0, 150, 0);
+rectLight1.position.set(0, 200, 0);
 rectLight1.lookAt(30, 0, 0);
 
 const rectLight2 = new THREE.RectAreaLight(
