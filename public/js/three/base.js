@@ -416,7 +416,7 @@ function init() {
   // });
 
   // 업다운 로고
-  const logoPath = "./static/model/updwon-logo/updown-logo-2.gltf";
+  const logoPath = "./static/model/updwon-logo/updown-logo-3.gltf";
   loader.load(logoPath, function (gltf) {
     updownLogo = gltf.scene;
 
