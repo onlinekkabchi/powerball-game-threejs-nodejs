@@ -131,10 +131,10 @@ function init() {
     window.innerWidth / 2,
     window.innerHeight / 2,
     window.innerHeight / -2,
-    -600,
-    500 // 카메라 거리
+    -1000,
+    800 // 카메라 거리
   );
-  camera.position.set(0, 80, 150);
+  camera.position.set(-80, 80, 150);
   camera.lookAt(0, 0, 0);
 
   renderer = new THREE.WebGLRenderer({
@@ -465,7 +465,7 @@ function init() {
       console.log("robot");
       console.log(gltf);
 
-      trupper.position.set(250, -120, 30);
+      trupper.position.set(0, -120, 380);
       trupper.scale.set(25, 25, 25);
 
       scene.add(trupper);
