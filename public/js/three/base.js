@@ -441,18 +441,19 @@ function init() {
     }
   );
 
-  // 스톰트루퍼
-  const robotPath = "./static/model/dancing_robot/scene.gltf";
+  // 로봇
+  const robotPath = "./static/model/dancing_robot/robot-3.gltf";
   const trupperPath = "./static/model/dancing_stormtrooper/scene.gltf";
   loader.load(
     robotPath,
     function (gltf) {
       trupper = gltf.scene;
 
-      console.log("trupper");
+      console.log("robot");
       console.log(gltf);
-      trupper.position.set(250, -100, 30);
-      trupper.scale.set(20, 20, 20);
+
+      trupper.position.set(250, -120, 30);
+      trupper.scale.set(25, 25, 25);
 
       scene.add(trupper);
 
