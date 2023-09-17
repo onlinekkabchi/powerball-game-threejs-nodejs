@@ -134,7 +134,7 @@ function init() {
     -1000,
     800 // 카메라 거리
   );
-  camera.position.set(-80, 80, 150);
+  camera.position.set(-80, 50, 150);
   camera.lookAt(0, 0, 0);
 
   renderer = new THREE.WebGLRenderer({
@@ -465,8 +465,8 @@ function init() {
       console.log("robot");
       console.log(gltf);
 
-      trupper.position.set(0, -120, 380);
-      trupper.scale.set(25, 25, 25);
+      trupper.position.set(30, -120, 400);
+      trupper.scale.set(20, 20, 20);
 
       scene.add(trupper);
 
@@ -518,6 +518,11 @@ function animate() {
     lotteryMixer.update(mixerUpdateDelta);
   }
 
+  if (camera.position.x < 0) {
+    camera.position.x += 0.5;
+    camera.lookAt(0, 0, 0);
+  }
+
   // camera.layers.set(BLOOM_SCENE);
   composer.render();
   // bloomComposer.render();
@@ -529,11 +534,8 @@ function render() {
 }
 
 setTimeout(() => {
-  // if (ringAction) {
-  // ringMixer.update(mixerUpdateDelta);
-  // ringAction.play();
-  // }
   console.log("ring animation playing..");
+
   isRingAnimationPlaying = true;
   ballController.moving = true;
 }, 3000);
