@@ -189,15 +189,14 @@ function init() {
   // pointLight2, pointLightHelper2
   // );
 
+  // 사각 조명 추가
   RectAreaLightUniformsLib.init();
   scene.add(
-    rectLight1
-    // rectLight2,
+    rectLight1,
+    //   rectLight2
     // rectLight3,
-    // new RectAreaLightHelper(rectLight1)
+    new RectAreaLightHelper(rectLight1)
   );
-  console.log("rect light");
-  console.log(rectLight1, rectLight2, rectLight3);
 
   // 안개 추가
   // Create a fog with the desired color and initial density
