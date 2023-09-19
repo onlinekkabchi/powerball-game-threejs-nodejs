@@ -36,13 +36,13 @@ const light = {
 const ambientLight = new THREE.AmbientLight(light.directional);
 ambientLight.position.set(0, 200, 0);
 ambientLight.scale.set(100, 50, 100);
-ambientLight.intensity = 0.05;
+ambientLight.intensity = 5;
 
 // 전체 광
 const dirLight = new THREE.DirectionalLight(light.directional);
 dirLight.position.set(0, 250, 0);
 dirLight.scale.set(100, 50, 100);
-dirLight.intensity = 0.03;
+dirLight.intensity = 0.05;
 
 const dirLightHelper = new THREE.DirectionalLightHelper(dirLight, 10);
 
