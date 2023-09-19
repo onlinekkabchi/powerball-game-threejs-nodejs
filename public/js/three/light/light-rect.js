@@ -8,9 +8,9 @@ const light = {
   blue: 0x0000ff,
 };
 const params = {
-  width: 50,
-  height: 50,
-  intensity: 10,
+  width: 10,
+  height: 10,
+  intensity: 100,
 };
 const rectLight1 = new THREE.RectAreaLight(
   light.white,
@@ -18,7 +18,7 @@ const rectLight1 = new THREE.RectAreaLight(
   params.width,
   params.height
 );
-rectLight1.position.set(0, 200, 0);
+rectLight1.position.set(0, 180, 0);
 rectLight1.lookAt(30, 0, 0);
 
 const rectLight2 = new THREE.RectAreaLight(
