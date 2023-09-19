@@ -514,7 +514,7 @@ function animate() {
 
   if (isRingAnimationPlaying) {
     //   ringAction.play();
-    lotterySampleMixer.update(mixerUpdateDelta * 1.8);
+    lotterySampleMixer.update(mixerUpdateDelta * 2.5);
     lotteryMixer.update(mixerUpdateDelta);
   }
 
